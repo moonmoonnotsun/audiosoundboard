@@ -969,6 +969,33 @@
     font-weight: 600;
 }
 
+.app-store-link {
+    color: #a5b4fc;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(165, 180, 252, 0.4);
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.app-store-link:hover {
+    color: #c7d2fe;
+    border-bottom-color: rgba(199, 210, 254, 0.75);
+}
+
+.faq-answer .app-store-link {
+    color: #a5b4fc;
+}
+
+.cta-description .app-store-link {
+    color: #e0e7ff;
+    border-bottom-color: rgba(224, 231, 255, 0.45);
+}
+
+.cta-description .app-store-link:hover {
+    color: #ffffff;
+    border-bottom-color: rgba(255, 255, 255, 0.7);
+}
+
 .faq-list {
     max-width: 820px;
     margin: 0 auto;
