@@ -458,13 +458,20 @@
         
         @media (max-width: 768px) {
             .screenshots-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                grid-template-columns: none !important;
+                max-width: none !important;
+            }
+
+            .screenshot-item {
+                flex: 0 0 calc((100vw - 40px - 24px) / 2.5) !important;
             }
         }
         
         @media (max-width: 480px) {
             .screenshots-grid {
-                grid-template-columns: 1fr !important;
+                grid-template-columns: none !important;
             }
         }
         
@@ -933,7 +940,8 @@
                 <h2 class="section-title">See It In Action</h2>
                 <p class="section-subtitle">Experience the fast, intuitive interface designed for creators</p>
             </div>
-            <div class="screenshots-grid">
+            <div class="screenshots-carousel" aria-label="App screenshots">
+                <div class="screenshots-grid">
                 <div class="screenshot-item">
                     <img src="assets/images/soundboard/optimized/Frame 3004.jpg" alt="Sound Board iOS app showing sound customization options" loading="lazy" width="280" height="600" decoding="async" onerror="this.parentElement.classList.add('screenshot-placeholder'); this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <p style="display: none;">Sound Customization</p>
@@ -949,6 +957,7 @@
                 <div class="screenshot-item">
                     <img src="assets/images/soundboard/optimized/Frame 3005.jpg" alt="Sound Board iOS app advanced settings screen" loading="lazy" width="280" height="600" decoding="async" onerror="this.parentElement.classList.add('screenshot-placeholder'); this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <p style="display: none;">Advanced Settings</p>
+                </div>
                 </div>
             </div>
         </div>

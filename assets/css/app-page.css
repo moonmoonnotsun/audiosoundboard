@@ -447,6 +447,10 @@
 }
 
 /* Screenshots Grid */
+.screenshots-carousel {
+    width: 100%;
+}
+
 .screenshots-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -770,9 +774,39 @@
         gap: 25px;
     }
     
+    .screenshots-carousel {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scroll-padding-left: 20px;
+        scrollbar-width: none;
+    }
+
+    .screenshots-carousel::-webkit-scrollbar {
+        display: none;
+    }
+
     .screenshots-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 12px;
+        max-width: none;
+        grid-template-columns: none;
+    }
+
+    .screenshot-item {
+        flex: 0 0 calc((100vw - 40px - 24px) / 2.5);
+        scroll-snap-align: start;
+        padding: 12px;
+    }
+
+    .screenshot-item:hover {
+        transform: none;
     }
     
     .app-section {
@@ -866,6 +900,10 @@
     .screenshot-placeholder {
         min-height: 400px;
         padding: 40px 15px;
+    }
+
+    .screenshot-item {
+        flex: 0 0 calc((100vw - 30px - 24px) / 2.5);
     }
     
     .cta-card {
