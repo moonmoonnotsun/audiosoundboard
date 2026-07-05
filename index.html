@@ -989,29 +989,59 @@
                 <p class="section-subtitle">Common questions about our free sound board app for iPhone</p>
             </div>
             <div class="faq-list">
-                <details class="faq-item" open>
-                    <summary class="faq-question">What is a soundboard app?</summary>
-                    <p class="faq-answer">A soundboard app lets you organize audio clips on tappable buttons and play them instantly. Sound Board - Audio Buttons is built for streamers, podcasters, DJs, and creators who need a fast, reliable sound board on iPhone.</p>
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        <span class="faq-question-text">What is a soundboard app?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <div class="faq-answer-wrap">
+                        <p class="faq-answer">A soundboard app lets you organize audio clips on tappable buttons and play them instantly. Sound Board - Audio Buttons is built for streamers, podcasters, DJs, and creators who need a fast, reliable sound board on iPhone.</p>
+                    </div>
                 </details>
                 <details class="faq-item">
-                    <summary class="faq-question">Is this soundboard app free?</summary>
-                    <p class="faq-answer">Yes — download free on the App Store. Premium features are optional in-app purchases.</p>
+                    <summary class="faq-question">
+                        <span class="faq-question-text">Is this soundboard app free?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <div class="faq-answer-wrap">
+                        <p class="faq-answer">Yes — download free on the App Store. Premium features are optional in-app purchases.</p>
+                    </div>
                 </details>
                 <details class="faq-item">
-                    <summary class="faq-question">Can I use it for streaming and podcasts?</summary>
-                    <p class="faq-answer">Absolutely. One-tap sound triggers, multiple soundboards, and volume control make it ideal for Twitch, YouTube, podcasts, and live shows.</p>
+                    <summary class="faq-question">
+                        <span class="faq-question-text">Can I use it for streaming and podcasts?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <div class="faq-answer-wrap">
+                        <p class="faq-answer">Absolutely. One-tap sound triggers, multiple soundboards, and volume control make it ideal for Twitch, YouTube, podcasts, and live shows.</p>
+                    </div>
                 </details>
                 <details class="faq-item">
-                    <summary class="faq-question">How do I add sounds to my sound board?</summary>
-                    <p class="faq-answer">Import from Files, pick from the sound library, or record directly in the app. Assign any clip to a customizable audio button on your board.</p>
+                    <summary class="faq-question">
+                        <span class="faq-question-text">How do I add sounds to my sound board?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <div class="faq-answer-wrap">
+                        <p class="faq-answer">Import from Files, pick from the sound library, or record directly in the app. Assign any clip to a customizable audio button on your board.</p>
+                    </div>
                 </details>
                 <details class="faq-item">
-                    <summary class="faq-question">Does it work offline?</summary>
-                    <p class="faq-answer">Your downloaded sounds and saved boards work offline. Browsing new library content needs internet.</p>
+                    <summary class="faq-question">
+                        <span class="faq-question-text">Does it work offline?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <div class="faq-answer-wrap">
+                        <p class="faq-answer">Your downloaded sounds and saved boards work offline. Browsing new library content needs internet.</p>
+                    </div>
                 </details>
                 <details class="faq-item">
-                    <summary class="faq-question">Soundboard vs sound board — same thing?</summary>
-                    <p class="faq-answer">Yes — same thing, one word or two. Multiple boards, audio buttons, and pro playback either way.</p>
+                    <summary class="faq-question">
+                        <span class="faq-question-text">Soundboard vs sound board — same thing?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <div class="faq-answer-wrap">
+                        <p class="faq-answer">Yes — same thing, one word or two. Multiple boards, audio buttons, and pro playback either way.</p>
+                    </div>
                 </details>
             </div>
         </div>
@@ -1065,6 +1095,30 @@
             window.addEventListener('load', resetCarouselScroll);
             window.addEventListener('pageshow', function (event) {
                 if (event.persisted) resetCarouselScroll();
+            });
+        })();
+
+        (function () {
+            document.querySelectorAll('.faq-item').forEach(function (details) {
+                var summary = details.querySelector('.faq-question');
+                var wrap = details.querySelector('.faq-answer-wrap');
+                if (!summary || !wrap) return;
+
+                summary.addEventListener('click', function (event) {
+                    event.preventDefault();
+
+                    if (details.open) {
+                        details.classList.add('is-closing');
+                        wrap.addEventListener('transitionend', function onClose(endEvent) {
+                            if (endEvent.propertyName !== 'grid-template-rows') return;
+                            details.classList.remove('is-closing');
+                            details.open = false;
+                            wrap.removeEventListener('transitionend', onClose);
+                        });
+                    } else {
+                        details.open = true;
+                    }
+                });
             });
         })();
     </script>
