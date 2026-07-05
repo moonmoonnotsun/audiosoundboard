@@ -460,18 +460,26 @@
             .screenshots-grid {
                 display: flex !important;
                 flex-wrap: nowrap !important;
+                justify-content: flex-start !important;
                 grid-template-columns: none !important;
                 max-width: none !important;
+                width: max-content !important;
+                margin: 0 !important;
             }
 
             .screenshot-item {
-                flex: 0 0 calc((100vw - 40px - 24px) / 2.5) !important;
+                flex: 0 0 auto !important;
+                width: calc((100vw - 40px - 24px) / 2.5) !important;
             }
         }
         
         @media (max-width: 480px) {
             .screenshots-grid {
                 grid-template-columns: none !important;
+            }
+
+            .screenshot-item {
+                width: calc((100vw - 30px - 24px) / 2.5) !important;
             }
         }
         
