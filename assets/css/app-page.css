@@ -446,9 +446,12 @@
     z-index: 1;
 }
 
-/* Screenshots Grid */
+/* Screenshots */
 .screenshots-carousel {
     width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .screenshots-grid {
@@ -705,6 +708,12 @@
 }
 
 @media (max-width: 768px) {
+    :root {
+        --screenshot-gap: 12px;
+        --screenshot-inset: 20px;
+        --screenshot-card-width: calc((100vw - (2 * var(--screenshot-inset)) - (2 * var(--screenshot-gap))) / 2.5);
+    }
+
     .app-hero-container {
         grid-template-columns: 1fr;
         gap: 40px;
@@ -775,16 +784,13 @@
     }
     
     .screenshots-carousel {
-        margin-left: -20px;
-        margin-right: -20px;
-        padding-left: 20px;
-        padding-right: 20px;
+        max-width: none;
+        margin: 0;
+        padding: 0;
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-        scroll-padding-left: 20px;
-        scroll-padding-right: 20px;
+        scroll-snap-type: x proximity;
         scrollbar-width: none;
         touch-action: pan-x;
         overscroll-behavior-x: contain;
@@ -796,20 +802,24 @@
 
     .screenshots-grid {
         display: flex;
+        flex-direction: row;
         flex-wrap: nowrap;
         justify-content: flex-start;
         align-items: stretch;
-        gap: 12px;
+        gap: var(--screenshot-gap);
         width: max-content;
         max-width: none;
         margin: 0;
+        padding: 0 var(--screenshot-inset) 0 0;
         grid-template-columns: none;
     }
 
     .screenshot-item {
-        flex: 0 0 auto;
-        width: calc((100vw - 40px - 24px) / 2.5);
+        flex: none;
+        width: var(--screenshot-card-width);
+        min-width: var(--screenshot-card-width);
         scroll-snap-align: start;
+        scroll-snap-stop: normal;
         padding: 12px;
     }
 
@@ -845,6 +855,11 @@
 }
 
 @media (max-width: 480px) {
+    :root {
+        --screenshot-inset: 15px;
+        --screenshot-card-width: calc((100vw - (2 * var(--screenshot-inset)) - (2 * var(--screenshot-gap))) / 2.5);
+    }
+
     .app-title {
         font-size: 2.25rem;
     }
@@ -908,11 +923,6 @@
     .screenshot-placeholder {
         min-height: 400px;
         padding: 40px 15px;
-    }
-
-    .screenshot-item {
-        flex: 0 0 auto;
-        width: calc((100vw - 30px - 24px) / 2.5);
     }
     
     .cta-card {

@@ -446,8 +446,13 @@
         
         .screenshots-grid {
             grid-template-columns: repeat(4, 1fr) !important;
-            justify-content: center !important;
             max-width: 1200px !important;
+        }
+
+        @media (min-width: 769px) {
+            .screenshots-grid {
+                justify-content: center !important;
+            }
         }
         
         @media (max-width: 1024px) {
@@ -468,18 +473,15 @@
             }
 
             .screenshot-item {
-                flex: 0 0 auto !important;
-                width: calc((100vw - 40px - 24px) / 2.5) !important;
+                flex: none !important;
+                width: var(--screenshot-card-width) !important;
+                min-width: var(--screenshot-card-width) !important;
             }
         }
         
         @media (max-width: 480px) {
             .screenshots-grid {
                 grid-template-columns: none !important;
-            }
-
-            .screenshot-item {
-                width: calc((100vw - 30px - 24px) / 2.5) !important;
             }
         }
         
@@ -942,14 +944,15 @@
         </div>
     </section>
 
-    <section class="app-section app-section-alt">
+    <section class="app-section app-section-alt" id="screenshots">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">See It In Action</h2>
                 <p class="section-subtitle">Experience the fast, intuitive interface designed for creators</p>
             </div>
-            <div class="screenshots-carousel" aria-label="App screenshots">
-                <div class="screenshots-grid">
+        </div>
+        <div class="screenshots-carousel" aria-label="App screenshots">
+            <div class="screenshots-grid">
                 <div class="screenshot-item">
                     <img src="assets/images/soundboard/optimized/Frame 3004.jpg" alt="Sound Board iOS app showing sound customization options" loading="lazy" width="280" height="600" decoding="async" onerror="this.parentElement.classList.add('screenshot-placeholder'); this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <p style="display: none;">Sound Customization</p>
@@ -965,7 +968,6 @@
                 <div class="screenshot-item">
                     <img src="assets/images/soundboard/optimized/Frame 3005.jpg" alt="Sound Board iOS app advanced settings screen" loading="lazy" width="280" height="600" decoding="async" onerror="this.parentElement.classList.add('screenshot-placeholder'); this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <p style="display: none;">Advanced Settings</p>
-                </div>
                 </div>
             </div>
         </div>
@@ -1050,5 +1052,21 @@
         </div>
     </footer>
     </main>
+    <script>
+        (function () {
+            var carousel = document.querySelector('.screenshots-carousel');
+            if (!carousel) return;
+
+            function resetCarouselScroll() {
+                carousel.scrollLeft = 0;
+            }
+
+            resetCarouselScroll();
+            window.addEventListener('load', resetCarouselScroll);
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) resetCarouselScroll();
+            });
+        })();
+    </script>
 </body>
 </html>
