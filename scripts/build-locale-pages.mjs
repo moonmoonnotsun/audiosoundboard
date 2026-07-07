@@ -193,7 +193,7 @@ function buildLocalePage(code) {
 
   // Features section
   html = html.replace(
-    /<span class="title-line">Lightning-fast setup,<\/span>\s*<span class="title-line title-accent">powerful control<\/span>/,
+    /<span class="title-line">Fast setup,<\/span>\s*<span class="title-line title-accent">powerful control<\/span>/,
     `<span class="title-line">${o.sectionFeaturesLine1}</span>\n                    <span class="title-line title-accent">${o.sectionFeaturesLine2}</span>`,
   );
   html = html.replace(
