@@ -12,6 +12,7 @@ const ROOT = path.join(__dirname, '..');
 const METADATA_PATH = path.join(ROOT, '../clarify/locales/appStoreMetadata-soundboard.json');
 const OVERLAY_PATH = path.join(ROOT, 'locales/landing-overlay.json');
 const OVERLAY_EXTRA_PATH = path.join(ROOT, 'locales/landing-overlay-extra.json');
+const OVERLAY_BATCH3_PATH = path.join(ROOT, 'locales/landing-overlay-batch3.json');
 const TEMPLATE_PATH = path.join(ROOT, 'index.html');
 const APP_ID = '6755937474';
 const APP_SLUG = 'sound-board-audio-buttons';
@@ -33,6 +34,16 @@ const LOCALE_CONFIG = {
   uk: { dir: 'uk', hreflang: 'uk', label: 'UK' },
   ar: { dir: 'ar', hreflang: 'ar', label: 'AR' },
   sv: { dir: 'sv', hreflang: 'sv', label: 'SV' },
+  'zh-Hant': { dir: 'zh-tw', hreflang: 'zh-Hant', label: 'TW' },
+  'pt-PT': { dir: 'pt-pt', hreflang: 'pt-PT', label: 'PT-PT' },
+  vi: { dir: 'vi', hreflang: 'vi', label: 'VI' },
+  id: { dir: 'id', hreflang: 'id', label: 'ID' },
+  th: { dir: 'th', hreflang: 'th', label: 'TH' },
+  cs: { dir: 'cs', hreflang: 'cs', label: 'CS' },
+  da: { dir: 'da', hreflang: 'da', label: 'DA' },
+  nb: { dir: 'nb', hreflang: 'nb', label: 'NB' },
+  fi: { dir: 'fi', hreflang: 'fi', label: 'FI' },
+  he: { dir: 'he', hreflang: 'he', label: 'HE' },
 };
 
 const LOCALES = Object.keys(LOCALE_CONFIG);
@@ -50,6 +61,7 @@ const metadata = JSON.parse(fs.readFileSync(METADATA_PATH, 'utf8'));
 const overlay = {
   ...JSON.parse(fs.readFileSync(OVERLAY_PATH, 'utf8')),
   ...JSON.parse(fs.readFileSync(OVERLAY_EXTRA_PATH, 'utf8')),
+  ...JSON.parse(fs.readFileSync(OVERLAY_BATCH3_PATH, 'utf8')),
 };
 let template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
 
@@ -86,7 +98,10 @@ function localeRedirectScript() {
     const entries = [[dir, p]];
     if (dir === 'pt') entries.push(['pt-br', p]);
     if (dir === 'zh') entries.push(['zh-cn', p], ['zh-hans', p]);
+    if (dir === 'zh-tw') entries.push(['zh-hant', p], ['zh-hk', p], ['zh-tw', p]);
+    if (dir === 'pt-pt') entries.push(['pt-pt', p]);
     if (dir === 'uk') entries.push(['ua', p]);
+    if (dir === 'nb') entries.push(['no', p], ['nn', p]);
     return entries;
   });
   const routesJson = JSON.stringify(Object.fromEntries(routeEntries));
@@ -361,9 +376,9 @@ function updateEnglishIndex() {
         }
         .lang-link {
             color: rgba(255, 255, 255, 0.55);
-            font-size: 0.8125rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.03em;
             text-decoration: none;
             transition: color 0.2s ease;
         }
