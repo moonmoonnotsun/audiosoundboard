@@ -13,6 +13,7 @@ const METADATA_PATH = path.join(ROOT, '../clarify/locales/appStoreMetadata-sound
 const OVERLAY_PATH = path.join(ROOT, 'locales/landing-overlay.json');
 const OVERLAY_EXTRA_PATH = path.join(ROOT, 'locales/landing-overlay-extra.json');
 const OVERLAY_BATCH3_PATH = path.join(ROOT, 'locales/landing-overlay-batch3.json');
+const OVERLAY_BATCH4_PATH = path.join(ROOT, 'locales/landing-overlay-batch4.json');
 const TEMPLATE_PATH = path.join(ROOT, 'index.html');
 const APP_ID = '6755937474';
 const APP_SLUG = 'sound-board-audio-buttons';
@@ -44,6 +45,16 @@ const LOCALE_CONFIG = {
   nb: { dir: 'nb', hreflang: 'nb', label: 'NB' },
   fi: { dir: 'fi', hreflang: 'fi', label: 'FI' },
   he: { dir: 'he', hreflang: 'he', label: 'HE' },
+  ca: { dir: 'ca', hreflang: 'ca', label: 'CA' },
+  hr: { dir: 'hr', hreflang: 'hr', label: 'HR' },
+  el: { dir: 'el', hreflang: 'el', label: 'EL' },
+  hi: { dir: 'hi', hreflang: 'hi', label: 'HI' },
+  hu: { dir: 'hu', hreflang: 'hu', label: 'HU' },
+  ms: { dir: 'ms', hreflang: 'ms', label: 'MS' },
+  'es-MX': { dir: 'es-mx', hreflang: 'es-MX', label: 'ES-MX' },
+  ro: { dir: 'ro', hreflang: 'ro', label: 'RO' },
+  sk: { dir: 'sk', hreflang: 'sk', label: 'SK' },
+  'fr-CA': { dir: 'fr-ca', hreflang: 'fr-CA', label: 'FR-CA' },
 };
 
 const LOCALES = Object.keys(LOCALE_CONFIG);
@@ -62,6 +73,7 @@ const overlay = {
   ...JSON.parse(fs.readFileSync(OVERLAY_PATH, 'utf8')),
   ...JSON.parse(fs.readFileSync(OVERLAY_EXTRA_PATH, 'utf8')),
   ...JSON.parse(fs.readFileSync(OVERLAY_BATCH3_PATH, 'utf8')),
+  ...JSON.parse(fs.readFileSync(OVERLAY_BATCH4_PATH, 'utf8')),
 };
 let template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
 
@@ -102,6 +114,8 @@ function localeRedirectScript() {
     if (dir === 'pt-pt') entries.push(['pt-pt', p]);
     if (dir === 'uk') entries.push(['ua', p]);
     if (dir === 'nb') entries.push(['no', p], ['nn', p]);
+    if (dir === 'es-mx') entries.push(['es-mx', p]);
+    if (dir === 'fr-ca') entries.push(['fr-ca', p]);
     return entries;
   });
   const routesJson = JSON.stringify(Object.fromEntries(routeEntries));
