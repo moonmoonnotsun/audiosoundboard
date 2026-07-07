@@ -111,12 +111,6 @@ function localeRedirectScript() {
             var path = window.location.pathname;
             if (path !== '/' && path !== '/index.html') return;
 
-            var saved = localStorage.getItem('audiosoundboard-lang');
-            if (saved) {
-                if (saved !== path) window.location.replace(saved);
-                return;
-            }
-
             var langs = navigator.languages || [navigator.language || 'en'];
             var primary = (langs[0] || 'en').toLowerCase();
             if (primary === 'en' || primary.indexOf('en-') === 0) return;
@@ -136,7 +130,6 @@ function langSwitcherScript() {
             if (!select) return;
             select.addEventListener('change', function () {
                 if (!this.value) return;
-                localStorage.setItem('audiosoundboard-lang', this.value);
                 window.location.href = this.value;
             });
         })();

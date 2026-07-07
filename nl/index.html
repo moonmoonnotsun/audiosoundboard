@@ -1144,7 +1144,7 @@
                     <div class="logo-circle">S</div>
                     <span class="logo-text">Geluidsbord - Audioknoppen</span>
                 </div>
-                                                                                                                <div class="footer-lang">
+                                                                                                                                <div class="footer-lang">
                     <label for="lang-select" class="footer-lang-label">Language</label>
                     <select id="lang-select" class="lang-select" aria-label="Language">
                         <option value="/">EN</option>
@@ -1232,7 +1232,6 @@
             if (!select) return;
             select.addEventListener('change', function () {
                 if (!this.value) return;
-                localStorage.setItem('audiosoundboard-lang', this.value);
                 window.location.href = this.value;
             });
         })();
