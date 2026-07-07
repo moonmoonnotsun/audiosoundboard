@@ -148,12 +148,12 @@ function langSwitcher(currentCode, label = 'Language') {
     const selected = code === currentCode ? ' selected' : '';
     return `<option value="${p}"${selected}>${localeLabel}</option>`;
   }).join('\n                        ');
-  return `            <div class="footer-lang">
-                <label for="lang-select" class="footer-lang-label">${label}</label>
-                <select id="lang-select" class="lang-select" aria-label="${label}">
-                    ${options}
-                </select>
-            </div>`;
+  return `                <div class="footer-lang">
+                    <label for="lang-select" class="footer-lang-label">${label}</label>
+                    <select id="lang-select" class="lang-select" aria-label="${label}">
+                        ${options}
+                    </select>
+                </div>`;
 }
 
 const FOOTER_LANG_CSS = `
@@ -162,11 +162,16 @@ const FOOTER_LANG_CSS = `
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-bottom: 16px;
+            justify-self: center;
+            margin: 0;
+            flex-shrink: 0;
+            white-space: nowrap;
         }
         .footer-lang-label {
             color: rgba(255, 255, 255, 0.55);
             font-size: 0.8125rem;
+            line-height: 1;
+            margin: 0;
         }
         .lang-select {
             appearance: none;
@@ -175,7 +180,10 @@ const FOOTER_LANG_CSS = `
             border-radius: 8px;
             color: #fff;
             font-size: 0.8125rem;
-            padding: 6px 32px 6px 10px;
+            line-height: 1.25;
+            height: 32px;
+            margin: 0;
+            padding: 0 32px 0 10px;
             cursor: pointer;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
@@ -421,8 +429,8 @@ function updateEnglishIndex() {
     `${langSwitcher('en')}\n                <div class="footer-links">`,
   );
   html = html.replace(
-    /\.footer-lang \{[\s\S]*?\.lang-link\.is-active \{[\s\S]*?\}\s*/g,
-    FOOTER_LANG_CSS,
+    /\.footer-lang \{[\s\S]*?\.lang-select:focus \{[\s\S]*?\}\s*/g,
+    `${FOOTER_LANG_CSS.trim()}\n`,
   );
   if (!html.includes('.lang-select')) {
     html = html.replace('</style>', `${FOOTER_LANG_CSS}    </style>`);
