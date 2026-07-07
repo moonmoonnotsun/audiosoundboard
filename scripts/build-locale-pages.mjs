@@ -110,28 +110,82 @@ function localeRedirectScript() {
             var routes = ${routesJson};
             var path = window.location.pathname;
             if (path !== '/' && path !== '/index.html') return;
-            var langs = navigator.languages || [navigator.language || 'en'];
-            for (var i = 0; i < langs.length; i++) {
-                var tag = (langs[i] || '').toLowerCase();
-                var base = tag.split('-')[0];
-                if (routes[tag]) { window.location.replace(routes[tag]); return; }
-                if (routes[base]) { window.location.replace(routes[base]); return; }
+
+            var saved = localStorage.getItem('audiosoundboard-lang');
+            if (saved) {
+                if (saved !== path) window.location.replace(saved);
+                return;
             }
+
+            var langs = navigator.languages || [navigator.language || 'en'];
+            var primary = (langs[0] || 'en').toLowerCase();
+            if (primary === 'en' || primary.indexOf('en-') === 0) return;
+
+            var tag = primary;
+            var base = primary.split('-')[0];
+            if (routes[tag]) { window.location.replace(routes[tag]); return; }
+            if (routes[base]) { window.location.replace(routes[base]); return; }
         })();
     </script>`;
 }
 
-function langSwitcher(currentCode) {
-  const links = ALL_LOCALES.map(({ code, path: p, label }) => {
-    const href = p;
-    const cls = code === currentCode ? 'lang-link is-active' : 'lang-link';
-    const hreflang = code === 'en' ? 'en' : LOCALE_CONFIG[code].hreflang;
-    return `<a href="${href}" hreflang="${hreflang}" class="${cls}">${label}</a>`;
-  }).join('\n                    ');
-  return `            <div class="footer-lang" aria-label="Language">
-                ${links}
+function langSwitcherScript() {
+  return `    <script>
+        (function () {
+            var select = document.getElementById('lang-select');
+            if (!select) return;
+            select.addEventListener('change', function () {
+                if (!this.value) return;
+                localStorage.setItem('audiosoundboard-lang', this.value);
+                window.location.href = this.value;
+            });
+        })();
+    </script>`;
+}
+
+function langSwitcher(currentCode, label = 'Language') {
+  const options = ALL_LOCALES.map(({ code, path: p, label: localeLabel }) => {
+    const selected = code === currentCode ? ' selected' : '';
+    return `<option value="${p}"${selected}>${localeLabel}</option>`;
+  }).join('\n                        ');
+  return `            <div class="footer-lang">
+                <label for="lang-select" class="footer-lang-label">${label}</label>
+                <select id="lang-select" class="lang-select" aria-label="${label}">
+                    ${options}
+                </select>
             </div>`;
 }
+
+const FOOTER_LANG_CSS = `
+        .footer-lang {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .footer-lang-label {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 0.8125rem;
+        }
+        .lang-select {
+            appearance: none;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.8125rem;
+            padding: 6px 32px 6px 10px;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+        }
+        .lang-select:focus {
+            outline: 2px solid rgba(255, 255, 255, 0.25);
+            outline-offset: 2px;
+        }
+`;
 
 function localeDir(code) {
   return LOCALE_CONFIG[code].dir;
@@ -232,7 +286,7 @@ function buildLocalePage(code) {
     );
     html = html.replace('</head>', `${hreflangBlock()}\n</head>`);
   }
-  html = html.replace(/\s*<script>\s*\(function \(\) \{\s*var supported[\s\S]*?<\/script>\s*/g, '\n');
+  html = html.replace(/\s*<script>\s*\(function \(\) \{\s*var (supported|routes)[\s\S]*?<\/script>\s*/g, '\n');
 
   // JSON-LD
   html = html.replace(/"inLanguage": "en-US"/, `"inLanguage": "${code}"`);
@@ -344,8 +398,11 @@ function buildLocalePage(code) {
   html = html.replace(/<div class="footer-lang"[^>]*>[\s\S]*?<\/div>\s*/g, '');
   html = html.replace(
     /<div class="footer-links">/,
-    `${langSwitcher(code)}\n                <div class="footer-links">`,
+    `${langSwitcher(code, o.langSwitcherLabel || 'Language')}\n                <div class="footer-links">`,
   );
+
+  html = html.replace(/\s*<script>\s*\(function \(\) \{\s*var select = document\.getElementById\('lang-select'\)[\s\S]*?<\/script>\s*/g, '\n');
+  html = html.replace('</body>', `${langSwitcherScript()}\n</body>`);
 
   return html;
 }
@@ -356,39 +413,22 @@ function updateEnglishIndex() {
     /<link rel="alternate" hreflang="[^"]*" href="[^"]*">\n?/g,
     '',
   );
-  html = html.replace(/\s*<script>\s*\(function \(\) \{\s*var routes[\s\S]*?<\/script>\s*/g, '\n');
+  html = html.replace(/\s*<script>\s*\(function \(\) \{\s*var (supported|routes)[\s\S]*?<\/script>\s*/g, '\n');
   html = html.replace('</head>', `${hreflangBlock()}\n${localeRedirectScript()}\n</head>`);
   html = html.replace(/<div class="footer-lang"[^>]*>[\s\S]*?<\/div>\s*/g, '');
   html = html.replace(
     /<div class="footer-links">/,
     `${langSwitcher('en')}\n                <div class="footer-links">`,
   );
-  if (!html.includes('.footer-lang')) {
-    html = html.replace(
-      '</style>',
-      `
-        .footer-lang {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 12px;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
-        .lang-link {
-            color: rgba(255, 255, 255, 0.55);
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.03em;
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-        .lang-link:hover,
-        .lang-link.is-active {
-            color: #fff;
-        }
-    </style>`,
-    );
+  html = html.replace(
+    /\.footer-lang \{[\s\S]*?\.lang-link\.is-active \{[\s\S]*?\}\s*/g,
+    FOOTER_LANG_CSS,
+  );
+  if (!html.includes('.lang-select')) {
+    html = html.replace('</style>', `${FOOTER_LANG_CSS}    </style>`);
   }
+  html = html.replace(/\s*<script>\s*\(function \(\) \{\s*var select = document\.getElementById\('lang-select'\)[\s\S]*?<\/script>\s*/g, '\n');
+  html = html.replace('</body>', `${langSwitcherScript()}\n</body>`);
   fs.writeFileSync(TEMPLATE_PATH, html);
 }
 

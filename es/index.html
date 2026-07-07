@@ -690,26 +690,36 @@
             }
         }
     
+        
         .footer-lang {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px 12px;
+            align-items: center;
             justify-content: center;
+            gap: 10px;
             margin-bottom: 16px;
         }
-        .lang-link {
+        .footer-lang-label {
             color: rgba(255, 255, 255, 0.55);
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.03em;
-            text-decoration: none;
-            transition: color 0.2s ease;
+            font-size: 0.8125rem;
         }
-        .lang-link:hover,
-        .lang-link.is-active {
+        .lang-select {
+            appearance: none;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
             color: #fff;
+            font-size: 0.8125rem;
+            padding: 6px 32px 6px 10px;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
         }
-    </style>
+        .lang-select:focus {
+            outline: 2px solid rgba(255, 255, 255, 0.25);
+            outline-offset: 2px;
+        }
+</style>
     
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -850,21 +860,7 @@
         ]
     }
     </script>
-<script>
-        (function () {
-            var routes = {"de":"/de/","fr":"/fr/","es":"/es/","ru":"/ru/","pl":"/pl/","ja":"/ja/","pt":"/pt/","pt-br":"/pt/","zh":"/zh/","zh-cn":"/zh/","zh-hans":"/zh/","ko":"/ko/","it":"/it/","nl":"/nl/","tr":"/tr/","uk":"/uk/","ua":"/uk/","ar":"/ar/","sv":"/sv/","zh-tw":"/zh-tw/","zh-hant":"/zh-tw/","zh-hk":"/zh-tw/","pt-pt":"/pt-pt/","vi":"/vi/","id":"/id/","th":"/th/","cs":"/cs/","da":"/da/","nb":"/nb/","no":"/nb/","nn":"/nb/","fi":"/fi/","he":"/he/"};
-            var path = window.location.pathname;
-            if (path !== '/' && path !== '/index.html') return;
-            var langs = navigator.languages || [navigator.language || 'en'];
-            for (var i = 0; i < langs.length; i++) {
-                var tag = (langs[i] || '').toLowerCase();
-                var base = tag.split('-')[0];
-                if (routes[tag]) { window.location.replace(routes[tag]); return; }
-                if (routes[base]) { window.location.replace(routes[base]); return; }
-            }
-        })();
-    </script>
-    <link rel="alternate" hreflang="en" href="https://audiosoundboard.app/">
+<link rel="alternate" hreflang="en" href="https://audiosoundboard.app/">
     <link rel="alternate" hreflang="de" href="https://audiosoundboard.app/de/">
     <link rel="alternate" hreflang="fr" href="https://audiosoundboard.app/fr/">
     <link rel="alternate" hreflang="es" href="https://audiosoundboard.app/es/">
@@ -1140,33 +1136,36 @@
                     <div class="logo-circle">S</div>
                     <span class="logo-text">Tablero de sonidos - Botones de audio</span>
                 </div>
-                                                                <div class="footer-lang" aria-label="Language">
-                <a href="/" hreflang="en" class="lang-link">EN</a>
-                    <a href="/de/" hreflang="de" class="lang-link">DE</a>
-                    <a href="/fr/" hreflang="fr" class="lang-link">FR</a>
-                    <a href="/es/" hreflang="es" class="lang-link is-active">ES</a>
-                    <a href="/ru/" hreflang="ru" class="lang-link">RU</a>
-                    <a href="/pl/" hreflang="pl" class="lang-link">PL</a>
-                    <a href="/ja/" hreflang="ja" class="lang-link">JA</a>
-                    <a href="/pt/" hreflang="pt-BR" class="lang-link">PT</a>
-                    <a href="/zh/" hreflang="zh-Hans" class="lang-link">ZH</a>
-                    <a href="/ko/" hreflang="ko" class="lang-link">KO</a>
-                    <a href="/it/" hreflang="it" class="lang-link">IT</a>
-                    <a href="/nl/" hreflang="nl" class="lang-link">NL</a>
-                    <a href="/tr/" hreflang="tr" class="lang-link">TR</a>
-                    <a href="/uk/" hreflang="uk" class="lang-link">UK</a>
-                    <a href="/ar/" hreflang="ar" class="lang-link">AR</a>
-                    <a href="/sv/" hreflang="sv" class="lang-link">SV</a>
-                    <a href="/zh-tw/" hreflang="zh-Hant" class="lang-link">TW</a>
-                    <a href="/pt-pt/" hreflang="pt-PT" class="lang-link">PT-PT</a>
-                    <a href="/vi/" hreflang="vi" class="lang-link">VI</a>
-                    <a href="/id/" hreflang="id" class="lang-link">ID</a>
-                    <a href="/th/" hreflang="th" class="lang-link">TH</a>
-                    <a href="/cs/" hreflang="cs" class="lang-link">CS</a>
-                    <a href="/da/" hreflang="da" class="lang-link">DA</a>
-                    <a href="/nb/" hreflang="nb" class="lang-link">NB</a>
-                    <a href="/fi/" hreflang="fi" class="lang-link">FI</a>
-                    <a href="/he/" hreflang="he" class="lang-link">HE</a>
+                                                                            <div class="footer-lang">
+                <label for="lang-select" class="footer-lang-label">Idioma</label>
+                <select id="lang-select" class="lang-select" aria-label="Idioma">
+                    <option value="/">EN</option>
+                        <option value="/de/">DE</option>
+                        <option value="/fr/">FR</option>
+                        <option value="/es/" selected>ES</option>
+                        <option value="/ru/">RU</option>
+                        <option value="/pl/">PL</option>
+                        <option value="/ja/">JA</option>
+                        <option value="/pt/">PT</option>
+                        <option value="/zh/">ZH</option>
+                        <option value="/ko/">KO</option>
+                        <option value="/it/">IT</option>
+                        <option value="/nl/">NL</option>
+                        <option value="/tr/">TR</option>
+                        <option value="/uk/">UK</option>
+                        <option value="/ar/">AR</option>
+                        <option value="/sv/">SV</option>
+                        <option value="/zh-tw/">TW</option>
+                        <option value="/pt-pt/">PT-PT</option>
+                        <option value="/vi/">VI</option>
+                        <option value="/id/">ID</option>
+                        <option value="/th/">TH</option>
+                        <option value="/cs/">CS</option>
+                        <option value="/da/">DA</option>
+                        <option value="/nb/">NB</option>
+                        <option value="/fi/">FI</option>
+                        <option value="/he/">HE</option>
+                </select>
             </div>
                 <div class="footer-links">
                     <a href="https://mpc-app-c2e7a.web.app/soundboard-privacy.html" target="_blank" rel="noopener noreferrer" class="footer-link">Privacidad</a>
@@ -1216,6 +1215,17 @@
                         details.open = true;
                     }
                 });
+            });
+        })();
+    </script>
+    <script>
+        (function () {
+            var select = document.getElementById('lang-select');
+            if (!select) return;
+            select.addEventListener('change', function () {
+                if (!this.value) return;
+                localStorage.setItem('audiosoundboard-lang', this.value);
+                window.location.href = this.value;
             });
         })();
     </script>
