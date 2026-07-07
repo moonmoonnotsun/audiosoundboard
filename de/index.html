@@ -7,7 +7,7 @@
     <!-- Primary Meta Tags -->
     <title>Soundboard-App - Audio-Buttons | Kostenloses Soundboard für iPhone</title>
     <meta name="title" content="Soundboard-App - Audio-Buttons | Kostenloses Soundboard für iPhone">
-    <meta name="description" content="Soundboard app for iPhone - create custom sound boards, import samples, and trigger audio with one tap. Free sound board app for streamers, podcasters, and DJs.">
+    <meta name="description" content="Soundboard-App für iPhone - erstelle eigene Soundboards, importiere Samples und löse Sounds mit einem Tipp aus. Kostenlos für Streamer, Podcaster und DJs.">
     <meta name="keywords" content="soundboard, audio, sampler, buttons, tasten, podcast, stream, effekte, ton, live, streamer">
     <meta name="author" content="omoot apps">
     <meta name="robots" content="index, follow">
@@ -850,12 +850,36 @@
         ]
     }
     </script>
-<link rel="alternate" hreflang="en" href="https://audiosoundboard.app/">
+<script>
+        (function () {
+            var routes = {"de":"/de/","fr":"/fr/","es":"/es/","ru":"/ru/","pl":"/pl/","ja":"/ja/","pt":"/pt/","pt-br":"/pt/","zh":"/zh/","zh-cn":"/zh/","zh-hans":"/zh/","ko":"/ko/","it":"/it/","nl":"/nl/","tr":"/tr/","uk":"/uk/","ua":"/uk/","ar":"/ar/","sv":"/sv/"};
+            var path = window.location.pathname;
+            if (path !== '/' && path !== '/index.html') return;
+            var langs = navigator.languages || [navigator.language || 'en'];
+            for (var i = 0; i < langs.length; i++) {
+                var tag = (langs[i] || '').toLowerCase();
+                var base = tag.split('-')[0];
+                if (routes[tag]) { window.location.replace(routes[tag]); return; }
+                if (routes[base]) { window.location.replace(routes[base]); return; }
+            }
+        })();
+    </script>
+    <link rel="alternate" hreflang="en" href="https://audiosoundboard.app/">
     <link rel="alternate" hreflang="de" href="https://audiosoundboard.app/de/">
     <link rel="alternate" hreflang="fr" href="https://audiosoundboard.app/fr/">
     <link rel="alternate" hreflang="es" href="https://audiosoundboard.app/es/">
     <link rel="alternate" hreflang="ru" href="https://audiosoundboard.app/ru/">
     <link rel="alternate" hreflang="pl" href="https://audiosoundboard.app/pl/">
+    <link rel="alternate" hreflang="ja" href="https://audiosoundboard.app/ja/">
+    <link rel="alternate" hreflang="pt-BR" href="https://audiosoundboard.app/pt/">
+    <link rel="alternate" hreflang="zh-Hans" href="https://audiosoundboard.app/zh/">
+    <link rel="alternate" hreflang="ko" href="https://audiosoundboard.app/ko/">
+    <link rel="alternate" hreflang="it" href="https://audiosoundboard.app/it/">
+    <link rel="alternate" hreflang="nl" href="https://audiosoundboard.app/nl/">
+    <link rel="alternate" hreflang="tr" href="https://audiosoundboard.app/tr/">
+    <link rel="alternate" hreflang="uk" href="https://audiosoundboard.app/uk/">
+    <link rel="alternate" hreflang="ar" href="https://audiosoundboard.app/ar/">
+    <link rel="alternate" hreflang="sv" href="https://audiosoundboard.app/sv/">
     <link rel="alternate" hreflang="x-default" href="https://audiosoundboard.app/">
 </head>
 <body>
@@ -1106,13 +1130,23 @@
                     <div class="logo-circle">S</div>
                     <span class="logo-text">Soundboard - Audio-Buttons</span>
                 </div>
-                                        <div class="footer-lang" aria-label="Language">
+                                                    <div class="footer-lang" aria-label="Language">
                 <a href="/" hreflang="en" class="lang-link">EN</a>
                     <a href="/de/" hreflang="de" class="lang-link is-active">DE</a>
                     <a href="/fr/" hreflang="fr" class="lang-link">FR</a>
                     <a href="/es/" hreflang="es" class="lang-link">ES</a>
                     <a href="/ru/" hreflang="ru" class="lang-link">RU</a>
                     <a href="/pl/" hreflang="pl" class="lang-link">PL</a>
+                    <a href="/ja/" hreflang="ja" class="lang-link">JA</a>
+                    <a href="/pt/" hreflang="pt-BR" class="lang-link">PT</a>
+                    <a href="/zh/" hreflang="zh-Hans" class="lang-link">ZH</a>
+                    <a href="/ko/" hreflang="ko" class="lang-link">KO</a>
+                    <a href="/it/" hreflang="it" class="lang-link">IT</a>
+                    <a href="/nl/" hreflang="nl" class="lang-link">NL</a>
+                    <a href="/tr/" hreflang="tr" class="lang-link">TR</a>
+                    <a href="/uk/" hreflang="uk" class="lang-link">UK</a>
+                    <a href="/ar/" hreflang="ar" class="lang-link">AR</a>
+                    <a href="/sv/" hreflang="sv" class="lang-link">SV</a>
             </div>
                 <div class="footer-links">
                     <a href="https://mpc-app-c2e7a.web.app/soundboard-privacy.html" target="_blank" rel="noopener noreferrer" class="footer-link">Datenschutz</a>

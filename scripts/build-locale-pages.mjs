@@ -11,15 +11,46 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const METADATA_PATH = path.join(ROOT, '../clarify/locales/appStoreMetadata-soundboard.json');
 const OVERLAY_PATH = path.join(ROOT, 'locales/landing-overlay.json');
+const OVERLAY_EXTRA_PATH = path.join(ROOT, 'locales/landing-overlay-extra.json');
 const TEMPLATE_PATH = path.join(ROOT, 'index.html');
 const APP_ID = '6755937474';
 const APP_SLUG = 'sound-board-audio-buttons';
 const BASE_URL = 'https://audiosoundboard.app';
-const LOCALES = ['de', 'fr', 'es', 'ru', 'pl'];
-const ALL_LOCALES = [{ code: 'en', path: '/' }, ...LOCALES.map((code) => ({ code, path: `/${code}/` }))];
+
+const LOCALE_CONFIG = {
+  de: { dir: 'de', hreflang: 'de', label: 'DE' },
+  fr: { dir: 'fr', hreflang: 'fr', label: 'FR' },
+  es: { dir: 'es', hreflang: 'es', label: 'ES' },
+  ru: { dir: 'ru', hreflang: 'ru', label: 'RU' },
+  pl: { dir: 'pl', hreflang: 'pl', label: 'PL' },
+  ja: { dir: 'ja', hreflang: 'ja', label: 'JA' },
+  'pt-BR': { dir: 'pt', hreflang: 'pt-BR', label: 'PT' },
+  'zh-Hans': { dir: 'zh', hreflang: 'zh-Hans', label: 'ZH' },
+  ko: { dir: 'ko', hreflang: 'ko', label: 'KO' },
+  it: { dir: 'it', hreflang: 'it', label: 'IT' },
+  nl: { dir: 'nl', hreflang: 'nl', label: 'NL' },
+  tr: { dir: 'tr', hreflang: 'tr', label: 'TR' },
+  uk: { dir: 'uk', hreflang: 'uk', label: 'UK' },
+  ar: { dir: 'ar', hreflang: 'ar', label: 'AR' },
+  sv: { dir: 'sv', hreflang: 'sv', label: 'SV' },
+};
+
+const LOCALES = Object.keys(LOCALE_CONFIG);
+const ALL_LOCALES = [
+  { code: 'en', hreflang: 'en', path: '/', label: 'EN' },
+  ...LOCALES.map((code) => ({
+    code,
+    hreflang: LOCALE_CONFIG[code].hreflang,
+    path: `/${LOCALE_CONFIG[code].dir}/`,
+    label: LOCALE_CONFIG[code].label,
+  })),
+];
 
 const metadata = JSON.parse(fs.readFileSync(METADATA_PATH, 'utf8'));
-const overlay = JSON.parse(fs.readFileSync(OVERLAY_PATH, 'utf8'));
+const overlay = {
+  ...JSON.parse(fs.readFileSync(OVERLAY_PATH, 'utf8')),
+  ...JSON.parse(fs.readFileSync(OVERLAY_EXTRA_PATH, 'utf8')),
+};
 let template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
 
 function parseFeatureBullets(description) {
@@ -42,51 +73,67 @@ function escapeJson(str) {
 
 function hreflangBlock() {
   const lines = ALL_LOCALES.map(
-    ({ code, path: p }) =>
-      `    <link rel="alternate" hreflang="${code}" href="${BASE_URL}${p === '/' ? '/' : p}">`,
+    ({ hreflang, path: p }) =>
+      `    <link rel="alternate" hreflang="${hreflang}" href="${BASE_URL}${p === '/' ? '/' : p}">`,
   );
   lines.push(`    <link rel="alternate" hreflang="x-default" href="${BASE_URL}/">`);
   return lines.join('\n');
 }
 
 function localeRedirectScript() {
+  const routeEntries = ALL_LOCALES.filter(({ path: p }) => p !== '/').flatMap(({ path: p }) => {
+    const dir = p.replace(/\//g, '');
+    const entries = [[dir, p]];
+    if (dir === 'pt') entries.push(['pt-br', p]);
+    if (dir === 'zh') entries.push(['zh-cn', p], ['zh-hans', p]);
+    if (dir === 'uk') entries.push(['ua', p]);
+    return entries;
+  });
+  const routesJson = JSON.stringify(Object.fromEntries(routeEntries));
   return `    <script>
         (function () {
-            var supported = { en: '/', de: '/de/', fr: '/fr/', es: '/es/', ru: '/ru/', pl: '/pl/' };
+            var routes = ${routesJson};
             var path = window.location.pathname;
             if (path !== '/' && path !== '/index.html') return;
             var langs = navigator.languages || [navigator.language || 'en'];
             for (var i = 0; i < langs.length; i++) {
-                var code = (langs[i] || 'en').toLowerCase().split('-')[0];
-                if (code !== 'en' && supported[code]) {
-                    window.location.replace(supported[code]);
-                    return;
-                }
+                var tag = (langs[i] || '').toLowerCase();
+                var base = tag.split('-')[0];
+                if (routes[tag]) { window.location.replace(routes[tag]); return; }
+                if (routes[base]) { window.location.replace(routes[base]); return; }
             }
         })();
     </script>`;
 }
 
 function langSwitcher(currentCode) {
-  const labels = { en: 'EN', de: 'DE', fr: 'FR', es: 'ES', ru: 'RU', pl: 'PL' };
-  const links = ALL_LOCALES.map(({ code, path: p }) => {
+  const links = ALL_LOCALES.map(({ code, path: p, label }) => {
     const href = p;
     const cls = code === currentCode ? 'lang-link is-active' : 'lang-link';
-    return `<a href="${code === 'en' ? '/' : `/${code}/`}" hreflang="${code}" class="${cls}">${labels[code]}</a>`;
+    const hreflang = code === 'en' ? 'en' : LOCALE_CONFIG[code].hreflang;
+    return `<a href="${href}" hreflang="${hreflang}" class="${cls}">${label}</a>`;
   }).join('\n                    ');
   return `            <div class="footer-lang" aria-label="Language">
                 ${links}
             </div>`;
 }
 
+function localeDir(code) {
+  return LOCALE_CONFIG[code].dir;
+}
+
 function buildLocalePage(code) {
   const o = overlay[code];
   const m = metadata[code];
+  if (!o || !m) {
+    throw new Error(`Missing overlay or metadata for locale: ${code}`);
+  }
   const features = parseFeatureBullets(m.description);
   features.push({ title: o.feature6Title, desc: o.feature6Desc });
   const appName = m.name;
   const storeUrl = appStoreUrl(o.appStoreCountry);
-  const pageUrl = `${BASE_URL}/${code}/`;
+  const dir = localeDir(code);
+  const pageUrl = `${BASE_URL}/${dir}/`;
   const keywords = m.keywords.replace(/,/g, ', ');
 
   let html = template;
@@ -95,7 +142,10 @@ function buildLocalePage(code) {
   html = html.replace(/href="assets\//g, 'href="../assets/');
   html = html.replace(/src="assets\//g, 'src="../assets/');
 
-  html = html.replace(/<html lang="en">/, `<html lang="${o.htmlLang}">`);
+  const htmlAttrs = o.htmlDir
+    ? `lang="${o.htmlLang}" dir="${o.htmlDir}"`
+    : `lang="${o.htmlLang}"`;
+  html = html.replace(/<html lang="en">/, `<html ${htmlAttrs}>`);
   html = html.replace(
     /<title>[^<]*<\/title>/,
     `<title>${o.metaTitle}</title>`,
@@ -103,6 +153,10 @@ function buildLocalePage(code) {
   html = html.replace(
     /<meta name="title" content="[^"]*">/,
     `<meta name="title" content="${o.metaTitle}">`,
+  );
+  html = html.replace(
+    /<meta name="description" content="[^"]*">/,
+    `<meta name="description" content="${o.metaDescription}">`,
   );
   html = html.replace(
     /<meta property="og:description" content="[^"]*">/,
@@ -283,16 +337,17 @@ function buildLocalePage(code) {
 
 function updateEnglishIndex() {
   let html = fs.readFileSync(TEMPLATE_PATH, 'utf8');
-  if (!html.includes('hreflang="de"')) {
-    html = html.replace('</head>', `${hreflangBlock()}\n${localeRedirectScript()}\n</head>`);
-  }
+  html = html.replace(
+    /<link rel="alternate" hreflang="[^"]*" href="[^"]*">\n?/g,
+    '',
+  );
+  html = html.replace(/\s*<script>\s*\(function \(\) \{\s*var routes[\s\S]*?<\/script>\s*/g, '\n');
+  html = html.replace('</head>', `${hreflangBlock()}\n${localeRedirectScript()}\n</head>`);
   html = html.replace(/<div class="footer-lang"[^>]*>[\s\S]*?<\/div>\s*/g, '');
-  if (!html.includes('footer-lang')) {
-    html = html.replace(
-      /<div class="footer-links">/,
-      `${langSwitcher('en')}\n                <div class="footer-links">`,
-    );
-  }
+  html = html.replace(
+    /<div class="footer-links">/,
+    `${langSwitcher('en')}\n                <div class="footer-links">`,
+  );
   if (!html.includes('.footer-lang')) {
     html = html.replace(
       '</style>',
@@ -345,11 +400,11 @@ updateEnglishIndex();
 template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
 
 for (const code of LOCALES) {
-  const outDir = path.join(ROOT, code);
+  const outDir = path.join(ROOT, localeDir(code));
   fs.mkdirSync(outDir, { recursive: true });
   const html = buildLocalePage(code);
   fs.writeFileSync(path.join(outDir, 'index.html'), html);
-  console.log(`Built ${code}/index.html`);
+  console.log(`Built ${localeDir(code)}/index.html (${code})`);
 }
 
 updateSitemap();
