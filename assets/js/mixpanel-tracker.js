@@ -312,6 +312,9 @@
         },
 
         getButtonLocation: function(buttonElement) {
+            if (window.location.pathname.indexOf('/download') === 0) {
+                return 'download_page';
+            }
             // Check if button is in hero section
             if (buttonElement.closest('.app-hero')) {
                 return 'hero';
