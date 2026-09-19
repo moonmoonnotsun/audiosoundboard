@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Download Sound Board - Audio Buttons</title>
-    <meta name="description" content="Get Sound Board - Audio Buttons on the App Store.">
+    <meta name="description" content="Get Sound Board - Audio Buttons free on the App Store. Custom soundboards for creators, streamers, podcasters and DJs.">
     <meta name="robots" content="noindex, follow">
     <meta name="theme-color" content="#4f5afc">
     <meta name="apple-itunes-app" content="app-id=6755937474">
-    <!-- Fallback redirect for crawlers / slow JS -->
-    <meta http-equiv="refresh" content="0;url=https://apps.apple.com/us/app/sound-board-audio-buttons/id6755937474">
     <link rel="canonical" href="https://audiosoundboard.app/download/">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/soundboard/favicon-32x32.png">
+    <meta property="og:title" content="Download Sound Board - Audio Buttons">
+    <meta property="og:description" content="Free soundboard app for iPhone — create boards, trigger sounds with one tap.">
+    <meta property="og:url" content="https://audiosoundboard.app/download/">
+    <meta property="og:type" content="website">
     <style>
         :root { color-scheme: dark; }
         * { box-sizing: border-box; }
@@ -30,57 +32,82 @@
         .card {
             max-width: 420px;
             width: 100%;
-            padding: 32px 24px;
+            padding: 36px 28px;
             border-radius: 20px;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+        .badge {
+            display: inline-block;
+            margin-bottom: 16px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(79, 90, 252, 0.2);
+            color: #aeb4ff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
         h1 {
-            margin: 0 0 8px;
-            font-size: 1.35rem;
+            margin: 0 0 10px;
+            font-size: 1.45rem;
             font-weight: 700;
+            line-height: 1.25;
         }
         p {
-            margin: 0 0 24px;
+            margin: 0 0 28px;
             color: rgba(245, 247, 255, 0.72);
-            line-height: 1.45;
-            font-size: 0.95rem;
+            line-height: 1.5;
+            font-size: 0.98rem;
         }
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            min-height: 48px;
-            padding: 12px 20px;
-            border-radius: 12px;
+            min-height: 52px;
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 14px;
             background: #4f5afc;
             color: #fff;
+            font-size: 1rem;
             font-weight: 600;
             text-decoration: none;
         }
-        .btn:active { opacity: 0.9; }
+        .btn:active { opacity: 0.92; }
+        .sub {
+            margin-top: 18px;
+            margin-bottom: 0;
+            font-size: 0.8rem;
+            color: rgba(245, 247, 255, 0.45);
+        }
+        .sub a {
+            color: rgba(174, 180, 255, 0.9);
+        }
     </style>
-    <script>
-        (function () {
-            var STORE =
-                'https://apps.apple.com/us/app/sound-board-audio-buttons/id6755937474';
-            // Prefer replace so Back doesn't bounce through this page
-            window.location.replace(STORE);
-        })();
-    </script>
 </head>
 <body>
     <main class="card">
+        <div class="badge">Free on iPhone</div>
         <h1>Sound Board – Audio Buttons</h1>
-        <p>Opening the App Store… If nothing happens, tap the button below.</p>
+        <p>
+            Create custom soundboards, organize samples, and trigger audio with one tap —
+            for live events, creators, podcasts and DJs.
+        </p>
+        <!-- No auto-redirect: Meta treats App Store redirects as app URLs (#1487810). -->
         <a
             class="btn"
+            id="store-btn"
             href="https://apps.apple.com/us/app/sound-board-audio-buttons/id6755937474"
             rel="noopener noreferrer"
         >
             Download on the App Store
         </a>
+        <p class="sub">
+            Or browse the
+            <a href="https://audiosoundboard.app/">full site</a>
+        </p>
     </main>
 </body>
 </html>
