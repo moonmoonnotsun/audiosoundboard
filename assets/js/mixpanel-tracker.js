@@ -143,12 +143,21 @@
 
         /**
          * Track download button click
+         * @param {Element} buttonElement
+         * @param {Function} [done] - called after Mixpanel queues/sends the event
          */
-        trackDownloadClick: function(buttonElement) {
+        trackDownloadClick: function(buttonElement, done) {
             const appName = this.getPageName();
             const buttonLocation = this.getButtonLocation(buttonElement);
             const timeOnPage = Math.floor((Date.now() - this.state.pageStartTime) / 1000);
             const scrollDepth = this.getScrollDepth();
+            let finished = false;
+
+            const finish = function() {
+                if (finished) return;
+                finished = true;
+                if (typeof done === 'function') done();
+            };
 
             mixpanel.track(this.formatEventName('download_button_clicked'), {
                 app_name: appName,
@@ -159,11 +168,28 @@
                 scroll_depth: scrollDepth,
                 referrer: document.referrer || 'direct',
                 utm_source: this.getUTMParam('utm_source')
-            });
+            }, finish);
+
+            // Fallback if Mixpanel callback never fires (adblock / stub)
+            setTimeout(finish, 300);
 
             if (this.config.debug) {
                 console.log('Tracked:', this.formatEventName('download_button_clicked'), { app_name: appName, button_location: buttonLocation });
             }
+        },
+
+        /**
+         * Resolve App Store URL from link href or data-store-url (landing pages)
+         */
+        getStoreUrl: function(element) {
+            if (!element) return null;
+            if (element.dataset && element.dataset.storeUrl) {
+                return element.dataset.storeUrl;
+            }
+            if (element.href && element.href.indexOf('apps.apple.com') !== -1) {
+                return element.href;
+            }
+            return null;
         },
 
         /**
@@ -224,18 +250,27 @@
          * Setup event listeners
          */
         setupEventListeners: function() {
-            // Track download button clicks
+            // Track download button clicks, then navigate after the event is queued
             document.addEventListener('click', (e) => {
                 const target = e.target.closest('.btn-app-store, a[href*="apps.apple.com"]');
-                if (target) {
-                    e.preventDefault();
-                    this.trackDownloadClick(target);
-                    // Navigate after tracking
-                    setTimeout(() => {
-                        window.open(target.href, '_blank', 'noopener,noreferrer');
-                    }, 100);
-                }
-            });
+                if (!target) return;
+
+                const storeUrl = this.getStoreUrl(target);
+                e.preventDefault();
+                e.stopImmediatePropagation();
+
+                this.trackDownloadClick(target, () => {
+                    if (!storeUrl) return;
+
+                    // Landing CTAs (/get, /download): same-tab so App Store opens reliably on mobile
+                    if (target.tagName === 'BUTTON' || target.dataset.storeUrl) {
+                        window.location.href = storeUrl;
+                        return;
+                    }
+
+                    window.open(storeUrl, '_blank', 'noopener,noreferrer');
+                });
+            }, true);
 
             // Track logo clicks (app pages only)
             const logoLink = document.querySelector('.app-icon-large a');
@@ -312,7 +347,11 @@
         },
 
         getButtonLocation: function(buttonElement) {
-            if (window.location.pathname.indexOf('/download') === 0) {
+            const path = window.location.pathname;
+            if (path.indexOf('/get') === 0) {
+                return 'get_page';
+            }
+            if (path.indexOf('/download') === 0) {
                 return 'download_page';
             }
             // Check if button is in hero section

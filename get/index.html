@@ -168,13 +168,12 @@
                 });
             }
 
+            // Assemble App Store URL in JS (keep apps.apple.com out of static HTML for Meta ads).
+            // MixpanelTracker reads data-store-url, tracks download_button_clicked, then navigates.
             var storeParts = ['https://', 'apps.apple.com', '/us/app/sound-board-audio-buttons/id', '6755937474'];
             var btn = document.getElementById('store-btn');
             if (btn) {
-                btn.addEventListener('click', function() {
-                    var url = storeParts.join('');
-                    window.location.href = url;
-                });
+                btn.dataset.storeUrl = storeParts.join('');
             }
         });
     </script>
