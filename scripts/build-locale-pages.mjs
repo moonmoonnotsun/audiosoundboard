@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Generate localized landing pages for audiosoundboard.app
+ * Build the homepage and localized pages from scripts/home.template.html.
  * Usage: node scripts/build-locale-pages.mjs
  */
 import fs from 'fs';
@@ -10,11 +10,15 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const METADATA_PATH = path.join(ROOT, '../clarify/locales/appStoreMetadata-soundboard.json');
-const OVERLAY_PATH = path.join(ROOT, 'locales/landing-overlay.json');
-const OVERLAY_EXTRA_PATH = path.join(ROOT, 'locales/landing-overlay-extra.json');
-const OVERLAY_BATCH3_PATH = path.join(ROOT, 'locales/landing-overlay-batch3.json');
-const OVERLAY_BATCH4_PATH = path.join(ROOT, 'locales/landing-overlay-batch4.json');
-const TEMPLATE_PATH = path.join(ROOT, 'index.html');
+const OVERLAY_PATHS = [
+  'landing-overlay.json',
+  'landing-overlay-extra.json',
+  'landing-overlay-batch3.json',
+  'landing-overlay-batch4.json',
+].map((name) => path.join(ROOT, 'locales', name));
+const COPY_PATH = path.join(ROOT, 'locales/home-copy.json');
+const SEO_PATH = path.join(ROOT, 'locales/home-seo.json');
+const TEMPLATE_PATH = path.join(ROOT, 'scripts/home.template.html');
 const APP_ID = '6755937474';
 const APP_SLUG = 'sound-board-audio-buttons';
 const BASE_URL = 'https://audiosoundboard.app';
@@ -57,24 +61,6 @@ const LOCALE_CONFIG = {
   'fr-CA': { dir: 'fr-ca', hreflang: 'fr-CA', label: 'FR-CA' },
 };
 
-// Languages that don't delimit words with spaces - a literal space between
-// concatenated title fragments would be visually wrong for these locales.
-const NO_SPACE_LOCALES = new Set(['ja', 'zh-Hans', 'zh-Hant']);
-
-// Joins two adjacent title fragments (e.g. plain text immediately followed by
-// a <span> highlight) with a space where the locale's script uses spaces
-// between words, and no space for CJK locales. Only inserts a separator when
-// both sides actually have content, so it's safe even when one side is empty.
-function titleSep(code, left, right) {
-  if (!left || !right) return '';
-  if (/\s$/.test(left) || /^\s/.test(right)) return '';
-  // Never insert a space right before punctuation (e.g. a comma-led
-  // continuation like ", Streamers and DJs") - that would read wrong
-  // regardless of locale.
-  if (/^[,.;:!?、，。；：！？)\]}]/.test(right)) return '';
-  return NO_SPACE_LOCALES.has(code) ? '' : ' ';
-}
-
 const LOCALES = Object.keys(LOCALE_CONFIG);
 const ALL_LOCALES = [
   { code: 'en', hreflang: 'en', path: '/', label: 'EN' },
@@ -86,31 +72,40 @@ const ALL_LOCALES = [
   })),
 ];
 
-const metadata = JSON.parse(fs.readFileSync(METADATA_PATH, 'utf8'));
-const overlay = {
-  ...JSON.parse(fs.readFileSync(OVERLAY_PATH, 'utf8')),
-  ...JSON.parse(fs.readFileSync(OVERLAY_EXTRA_PATH, 'utf8')),
-  ...JSON.parse(fs.readFileSync(OVERLAY_BATCH3_PATH, 'utf8')),
-  ...JSON.parse(fs.readFileSync(OVERLAY_BATCH4_PATH, 'utf8')),
-};
-let template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
+const RAW_KEYS = new Set([
+  'heroHtml',
+  'boardsHtml',
+  'featuresHtml',
+  'themesHtml',
+  'schemaName',
+  'schemaTitle',
+  'schemaDescription',
+  'featureList',
+  'hreflang',
+  'ogLocaleAlternates',
+  'localeRedirect',
+  'langSwitcher',
+  'langScript',
+  'htmlDirAttr',
+]);
 
-function parseFeatureBullets(description) {
-  return description
-    .split('• ')
-    .slice(1, 6)
-    .map((part) => {
-      const [title, ...rest] = part.trim().split('\n\n');
-      return { title: title.trim(), desc: rest.join('\n\n').trim() };
-    });
+const metadata = JSON.parse(fs.readFileSync(METADATA_PATH, 'utf8'));
+const overlay = Object.assign({}, ...OVERLAY_PATHS.map((file) => JSON.parse(fs.readFileSync(file, 'utf8'))));
+const copy = JSON.parse(fs.readFileSync(COPY_PATH, 'utf8'));
+const seo = JSON.parse(fs.readFileSync(SEO_PATH, 'utf8'));
+const template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
+const englishKeys = Object.keys(copy.en);
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 function appStoreUrl(country) {
   return `https://apps.apple.com/${country}/app/${APP_SLUG}/id${APP_ID}`;
-}
-
-function escapeJson(str) {
-  return str.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, ' ');
 }
 
 function hreflangBlock() {
@@ -142,11 +137,9 @@ function localeRedirectScript() {
             var routes = ${routesJson};
             var path = window.location.pathname;
             if (path !== '/' && path !== '/index.html') return;
-
             var langs = navigator.languages || [navigator.language || 'en'];
             var primary = (langs[0] || 'en').toLowerCase();
             if (primary === 'en' || primary.indexOf('en-') === 0) return;
-
             var tag = primary;
             var base = primary.split('-')[0];
             if (routes[tag]) { window.location.replace(routes[tag]); return; }
@@ -168,332 +161,122 @@ function langSwitcherScript() {
     </script>`;
 }
 
-function langSwitcher(currentCode, label = 'Language') {
+function langSwitcher(currentCode, label) {
   const options = ALL_LOCALES.map(({ code, path: p, label: localeLabel }) => {
     const selected = code === currentCode ? ' selected' : '';
     return `<option value="${p}"${selected}>${localeLabel}</option>`;
   }).join('\n                        ');
-  return `                <div class="footer-lang">
-                    <label for="lang-select" class="footer-lang-label">${label}</label>
-                    <select id="lang-select" class="lang-select" aria-label="${label}">
+  return `<label class="lang">${escapeHtml(label)}
+                    <select id="lang-select" aria-label="${escapeHtml(label)}">
                         ${options}
                     </select>
-                </div>`;
+                </label>`;
 }
 
-const FOOTER_LANG_CSS = `
-        .footer-lang {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            justify-self: center;
-            margin: 0;
-            flex-shrink: 0;
-            white-space: nowrap;
-        }
-        .footer-lang-label {
-            color: rgba(255, 255, 255, 0.55);
-            font-size: 0.8125rem;
-            line-height: 1;
-            margin: 0;
-        }
-        .lang-select {
-            appearance: none;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 0.8125rem;
-            line-height: 1.25;
-            height: 32px;
-            margin: 0;
-            padding: 0 32px 0 10px;
-            cursor: pointer;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-        }
-        .lang-select:focus {
-            outline: 2px solid rgba(255, 255, 255, 0.25);
-            outline-offset: 2px;
-        }
-`;
-
-function localeDir(code) {
-  return LOCALE_CONFIG[code].dir;
+function ogLocaleAlternates(current) {
+  return ALL_LOCALES
+    .filter(({ code }) => code !== current)
+    .map(({ code }) => `    <meta property="og:locale:alternate" content="${seo[code].ogLocale}">`)
+    .join('\n');
 }
 
-function buildLocalePage(code) {
-  const o = overlay[code];
-  const m = metadata[code];
-  if (!o || !m) {
-    throw new Error(`Missing overlay or metadata for locale: ${code}`);
+function fill(html, values) {
+  let out = html;
+  for (const [key, value] of Object.entries(values)) {
+    const safe = RAW_KEYS.has(key) ? String(value) : escapeHtml(value);
+    out = out.split(`{{${key}}}`).join(safe);
   }
-  const features = parseFeatureBullets(m.description);
-  features.push({ title: o.feature6Title, desc: o.feature6Desc });
-  const appName = m.name;
-  const storeUrl = appStoreUrl(o.appStoreCountry);
-  const dir = localeDir(code);
-  const pageUrl = `${BASE_URL}/${dir}/`;
-  const keywords = m.keywords.replace(/,/g, ', ');
+  const leftover = out.match(/\{\{[a-zA-Z0-9]+\}\}/);
+  if (leftover) throw new Error(`Unfilled placeholder ${leftover[0]}`);
+  return out;
+}
 
-  let html = template;
+function buildPage(code) {
+  const strings = copy[code];
+  if (!strings) throw new Error(`Missing copy for ${code}`);
+  for (const key of englishKeys) {
+    if (typeof strings[key] !== 'string' || !strings[key]) {
+      throw new Error(`Missing ${code}.${key}`);
+    }
+  }
+  const isEnglish = code === 'en';
+  const o = isEnglish ? null : overlay[code];
+  const m = isEnglish ? metadata['en-US'] : metadata[code];
+  if (!m || (!isEnglish && !o)) throw new Error(`Missing metadata or overlay for ${code}`);
 
-  // Asset paths for subfolders
-  html = html.replace(/href="assets\//g, 'href="../assets/');
-  html = html.replace(/src="assets\//g, 'src="../assets/');
+  const pagePath = isEnglish ? '/' : `/${LOCALE_CONFIG[code].dir}/`;
+  const pageUrl = `${BASE_URL}${pagePath === '/' ? '/' : pagePath}`;
+  const country = isEnglish ? 'us' : o.appStoreCountry;
+  const storeUrl = appStoreUrl(country);
+  const appName = 'Sound Board Pro - Audio Pads';
+  const featureList = [1, 2, 3, 4, 5, 6].map((n) => strings[`f${n}Title`]);
+  const pageSeo = seo[code];
+  if (!pageSeo?.metaTitle || !pageSeo?.metaDescription || !pageSeo?.keywords || !pageSeo?.ogLocale) {
+    throw new Error(`Missing SEO for ${code}`);
+  }
+  const metaTitle = pageSeo.metaTitle;
+  const metaDescription = pageSeo.metaDescription;
 
-  const htmlAttrs = o.htmlDir
-    ? `lang="${o.htmlLang}" dir="${o.htmlDir}"`
-    : `lang="${o.htmlLang}"`;
-  html = html.replace(/<html lang="en">/, `<html ${htmlAttrs}>`);
-  html = html.replace(
-    /<title>[^<]*<\/title>/,
-    `<title>${o.metaTitle}</title>`,
-  );
-  html = html.replace(
-    /<meta name="title" content="[^"]*">/,
-    `<meta name="title" content="${o.metaTitle}">`,
-  );
-  html = html.replace(
-    /<meta name="description" content="[^"]*">/,
-    `<meta name="description" content="${o.metaDescription}">`,
-  );
-  html = html.replace(
-    /<meta property="og:description" content="[^"]*">/,
-    `<meta property="og:description" content="${o.metaDescription}">`,
-  );
-  html = html.replace(
-    /<meta name="twitter:description" content="[^"]*">/,
-    `<meta name="twitter:description" content="${o.metaDescription}">`,
-  );
-  html = html.replace(
-    /<meta name="twitter:url" content="[^"]*">/,
-    `<meta name="twitter:url" content="${pageUrl}">`,
-  );
-  html = html.replace(
-    /<meta name="keywords" content="[^"]*">/,
-    `<meta name="keywords" content="${keywords}">`,
-  );
-  html = html.replace(
-    /<meta name="language" content="[^"]*">/,
-    `<meta name="language" content="${m.localeName}">`,
-  );
-  html = html.replace(
-    /<link rel="canonical" href="[^"]*">/,
-    `<link rel="canonical" href="${pageUrl}">`,
-  );
-  html = html.replace(
-    /<meta property="og:url" content="[^"]*">/,
-    `<meta property="og:url" content="${pageUrl}">`,
-  );
-  html = html.replace(
-    /<meta property="og:title" content="[^"]*">/,
-    `<meta property="og:title" content="${o.metaTitle}">`,
-  );
-  html = html.replace(
-    /<meta name="twitter:title" content="[^"]*">/,
-    `<meta name="twitter:title" content="${o.metaTitle}">`,
-  );
-  html = html.replace(
-    /<meta property="og:locale" content="[^"]*">/,
-    `<meta property="og:locale" content="${o.ogLocale}">`,
-  );
-  html = html.replace(
-    /https:\/\/audiosoundboard\.app\/assets\//g,
-    `${BASE_URL}/assets/`,
-  );
-  html = html.replace(
-    /https:\/\/apps\.apple\.com\/us\/app\/sound-board-audio-buttons\/id6755937474/g,
+  const values = {
+    ...strings,
+    htmlLang: isEnglish ? 'en' : o.htmlLang,
+    htmlDirAttr: !isEnglish && o.htmlDir ? ` dir="${o.htmlDir}"` : '',
+    metaTitle,
+    metaDescription,
+    keywords: pageSeo.keywords,
+    languageName: isEnglish ? 'English' : m.localeName,
+    pageUrl,
+    ogLocale: pageSeo.ogLocale,
+    ogLocaleAlternates: ogLocaleAlternates(code),
+    appName: appName,
     storeUrl,
-  );
+    schemaName: JSON.stringify(appName),
+    schemaTitle: JSON.stringify(metaTitle),
+    schemaDescription: JSON.stringify(metaDescription),
+    featureList: JSON.stringify(featureList),
+    hreflang: hreflangBlock(),
+    localeRedirect: isEnglish ? localeRedirectScript() : '',
+    langSwitcher: langSwitcher(code, strings.langLabel),
+    langScript: langSwitcherScript(),
+  };
 
-  // hreflang + remove locale redirect on localized pages
-  if (!html.includes('hreflang="de"')) {
-    html = html.replace('</head>', `${hreflangBlock()}\n</head>`);
-  } else {
-    html = html.replace(
-      /<link rel="alternate" hreflang="[^"]*" href="[^"]*">\n?/g,
-      '',
-    );
-    html = html.replace('</head>', `${hreflangBlock()}\n</head>`);
+  let html = fill(template, values);
+  if (!isEnglish) {
+    html = html.replace(/href="assets\//g, 'href="../assets/');
+    html = html.replace(/src="assets\//g, 'src="../assets/');
   }
-  html = html.replace(/\s*<script>\s*\(function \(\) \{\s*var (supported|routes)[\s\S]*?<\/script>\s*/g, '\n');
-
-  // JSON-LD
-  html = html.replace(/"inLanguage": "en-US"/, `"inLanguage": "${code}"`);
-  html = html.replace(/"url": "https:\/\/audiosoundboard\.app\/"/g, `"url": "${pageUrl}"`);
-  html = html.replace(
-    /"name": "Sound Board - Audio Buttons"/,
-    `"name": "${escapeJson(appName)}"`,
-  );
-
-  const featureListJson = features.map((f) => `"${escapeJson(f.title)}"`).join(',\n            ');
-  html = html.replace(
-    /"featureList": \[[\s\S]*?\]/,
-    `"featureList": [\n            ${featureListJson}\n        ]`,
-  );
-
-  // Hero
-  html = html.replace(
-    /<p class="app-slogan">[^<]*<\/p>/,
-    `<p class="app-slogan">${o.heroSlogan}</p>`,
-  );
-  html = html.replace(
-    /<h1 class="app-title">[\s\S]*?<\/h1>/,
-    `<h1 class="app-title">${o.heroH1Before}${titleSep(code, o.heroH1Before, o.heroH1Highlight)}<span class="highlight-sound">${o.heroH1Highlight}</span>${titleSep(code, o.heroH1Highlight, o.heroH1After)}${o.heroH1After}</h1>`,
-  );
-  const taglineWithLink = `<a href="${storeUrl}" class="app-store-link" target="_blank" rel="noopener noreferrer">${appName}</a> - ${o.heroTagline}`;
-  html = html.replace(/<p class="app-tagline">[\s\S]*?<\/p>/, `<p class="app-tagline">${taglineWithLink}</p>`);
-
-  // Features section
-  html = html.replace(
-    /<span class="title-line">Fast setup,<\/span>\s*<span class="title-line title-accent">powerful control<\/span>/,
-    `<span class="title-line">${o.sectionFeaturesLine1}</span>\n                    <span class="title-line title-accent">${o.sectionFeaturesLine2}</span>`,
-  );
-  html = html.replace(
-    /<p class="section-subtitle">Everything you need in a soundboard app[\s\S]*?<\/p>/,
-    `<p class="section-subtitle">${o.sectionFeaturesSubtitle}</p>`,
-  );
-
-  const featureCards = [...html.matchAll(/<h3 class="feature-title">[^<]*<\/h3>\s*<p class="feature-description">[^<]*<\/p>/g)];
-  featureCards.forEach((match, i) => {
-    if (!features[i]) return;
-    const replacement = `<h3 class="feature-title">${features[i].title}</h3>\n                    <p class="feature-description">${features[i].desc}</p>`;
-    html = html.replace(match[0], replacement);
-  });
-
-  // Screenshots
-  html = html.replace(/<h2 class="section-title">See It In Action<\/h2>/, `<h2 class="section-title">${o.sectionScreenshotsTitle}</h2>`);
-  html = html.replace(
-    /<p class="section-subtitle">Experience the fast, intuitive interface designed for creators<\/p>/,
-    `<p class="section-subtitle">${o.sectionScreenshotsSubtitle}</p>`,
-  );
-
-  // About
-  html = html.replace(
-    /<h2 class="section-title">What Is a <span class="title-accent">Soundboard App<\/span>\?<\/h2>/,
-    `<h2 class="section-title">${o.sectionAboutTitle}${titleSep(code, o.sectionAboutTitle, o.sectionAboutTitleAccent)}<span class="title-accent">${o.sectionAboutTitleAccent}</span>${o.sectionAboutTitleEnd}</h2>`,
-  );
-  html = html.replace(
-    /<p class="section-subtitle about-copy">[\s\S]*?<\/p>/,
-    `<p class="section-subtitle about-copy">${o.sectionAboutCopy}<a href="${storeUrl}" class="app-store-link" target="_blank" rel="noopener noreferrer">${appName}</a>${o.sectionAboutCopyAfter}</p>`,
-  );
-
-  // FAQ header
-  html = html.replace(
-    /<h2 class="section-title">Soundboard App <span class="title-accent">FAQ<\/span><\/h2>/,
-    `<h2 class="section-title">${o.faqTitle}${titleSep(code, o.faqTitle, o.faqTitleAccent)}<span class="title-accent">${o.faqTitleAccent}</span></h2>`,
-  );
-  html = html.replace(
-    /<p class="section-subtitle">Common questions about our free sound board app for iPhone<\/p>/,
-    `<p class="section-subtitle">${o.faqSubtitle}</p>`,
-  );
-
-  const faqPairs = [
-    [o.faq1Q, `${o.faq1A}<a href="${storeUrl}" class="app-store-link" target="_blank" rel="noopener noreferrer">${appName}</a>${o.faq1AAfter}`],
-    [o.faq2Q, o.faq2A],
-    [o.faq3Q, o.faq3A],
-    [o.faq4Q, o.faq4A],
-    [o.faq5Q, o.faq5A],
-    [o.faq6Q, o.faq6A],
-  ];
-  const faqBlocks = [...html.matchAll(/<span class="faq-question-text">[^<]*<\/span>[\s\S]*?<p class="faq-answer">[\s\S]*?<\/p>/g)];
-  faqBlocks.forEach((match, i) => {
-    if (!faqPairs[i]) return;
-    const [q, a] = faqPairs[i];
-    html = html.replace(
-      match[0],
-      `<span class="faq-question-text">${q}</span>\n                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>\n                    </summary>\n                    <div class="faq-answer-wrap">\n                        <p class="faq-answer">${a}</p>`,
-    );
-  });
-
-  // CTA
-  html = html.replace(/<h2 class="cta-title">[^<]*<\/h2>/, `<h2 class="cta-title">${o.ctaTitle}</h2>`);
-  html = html.replace(
-    /<p class="cta-description">[\s\S]*?<\/p>/,
-    `<p class="cta-description">${o.ctaDescription}<a href="${storeUrl}" class="app-store-link" target="_blank" rel="noopener noreferrer">${appName}</a>${o.ctaDescriptionAfter}</p>`,
-  );
-
-  // Buttons
-  html = html.replace(/<span>Download on the App Store<\/span>/g, `<span>${o.downloadAppStore}</span>`);
-  html = html.replace(/<span class="btn-free">Free<\/span>/g, `<span class="btn-free">${o.free}</span>`);
-  html = html.replace(/aria-label="Download on the App Store"/g, `aria-label="${o.downloadAppStore}"`);
-
-  // Footer
-  html = html.replace(/<span class="logo-text">Sound Board - Audio Buttons<\/span>/, `<span class="logo-text">${appName}</span>`);
-  html = html.replace(/>Privacy<\/a>/, `>${o.privacy}</a>`);
-  html = html.replace(/>Terms<\/a>/, `>${o.terms}</a>`);
-  html = html.replace(/>Support<\/a>/, `>${o.support}</a>`);
-  html = html.replace(/>Contact<\/a>/, `>${o.contact}</a>`);
-
-  html = html.replace(/<div class="footer-lang"[^>]*>[\s\S]*?<\/div>\s*/g, '');
-  html = html.replace(
-    /<div class="footer-links">/,
-    `${langSwitcher(code, o.langSwitcherLabel || 'Language')}\n                <div class="footer-links">`,
-  );
-
-  html = html.replace(/\s*<script>\s*\(function \(\) \{\s*var select = document\.getElementById\('lang-select'\)[\s\S]*?<\/script>\s*/g, '\n');
-  html = html.replace('</body>', `${langSwitcherScript()}\n</body>`);
-
   return html;
 }
 
-function updateEnglishIndex() {
-  let html = fs.readFileSync(TEMPLATE_PATH, 'utf8');
-  html = html.replace(
-    /<link rel="alternate" hreflang="[^"]*" href="[^"]*">\n?/g,
-    '',
-  );
-  html = html.replace(/\s*<script>\s*\(function \(\) \{\s*var (supported|routes)[\s\S]*?<\/script>\s*/g, '\n');
-  html = html.replace('</head>', `${hreflangBlock()}\n${localeRedirectScript()}\n</head>`);
-  html = html.replace(/<div class="footer-lang"[^>]*>[\s\S]*?<\/div>\s*/g, '');
-  html = html.replace(
-    /<div class="footer-links">/,
-    `${langSwitcher('en')}\n                <div class="footer-links">`,
-  );
-  html = html.replace(
-    /\.footer-lang \{[\s\S]*?\.lang-select:focus \{[\s\S]*?\}\s*/g,
-    `${FOOTER_LANG_CSS.trim()}\n`,
-  );
-  if (!html.includes('.lang-select')) {
-    html = html.replace('</style>', `${FOOTER_LANG_CSS}    </style>`);
-  }
-  html = html.replace(/\s*<script>\s*\(function \(\) \{\s*var select = document\.getElementById\('lang-select'\)[\s\S]*?<\/script>\s*/g, '\n');
-  html = html.replace('</body>', `${langSwitcherScript()}\n</body>`);
-  fs.writeFileSync(TEMPLATE_PATH, html);
+for (const code of ['en', ...LOCALES]) {
+  const html = buildPage(code);
+  const outPath = code === 'en'
+    ? path.join(ROOT, 'index.html')
+    : path.join(ROOT, LOCALE_CONFIG[code].dir, 'index.html');
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  fs.writeFileSync(outPath, html);
+  console.log(`Built ${code === 'en' ? 'index.html' : `${LOCALE_CONFIG[code].dir}/index.html`}`);
 }
 
-function updateSitemap() {
-  const today = new Date().toISOString().slice(0, 10);
-  const urls = ALL_LOCALES.map(
-    ({ code, path: p }) => `    <url>
+const today = new Date().toISOString().slice(0, 10);
+const alternates = (selfPath) => ALL_LOCALES.map(({ hreflang, path: p }) => {
+  const href = `${BASE_URL}${p === '/' ? '/' : p}`;
+  return `        <xhtml:link rel="alternate" hreflang="${hreflang}" href="${href}"/>`;
+}).concat(`        <xhtml:link rel="alternate" hreflang="x-default" href="${BASE_URL}/"/>`).join('\n');
+const urls = ALL_LOCALES.map(({ path: p }) => `    <url>
         <loc>${BASE_URL}${p === '/' ? '/' : p}</loc>
         <lastmod>${today}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>${p === '/' ? '1.0' : '0.9'}</priority>
-    </url>`,
-  );
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+${alternates(p)}
+    </url>`);
+fs.writeFileSync(
+  path.join(ROOT, 'sitemap.xml'),
+  `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls.join('\n')}
 </urlset>
-`;
-  fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), xml);
-}
-
-updateEnglishIndex();
-template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
-
-for (const code of LOCALES) {
-  const outDir = path.join(ROOT, localeDir(code));
-  fs.mkdirSync(outDir, { recursive: true });
-  const html = buildLocalePage(code);
-  fs.writeFileSync(path.join(outDir, 'index.html'), html);
-  console.log(`Built ${localeDir(code)}/index.html (${code})`);
-}
-
-updateSitemap();
+`,
+);
 console.log('Updated sitemap.xml');

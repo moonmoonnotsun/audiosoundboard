@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="{{htmlLang}}"{{htmlDirAttr}}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>{{metaTitle}}</title>
+    <meta name="title" content="{{metaTitle}}">
+    <meta name="description" content="{{metaDescription}}">
+    <meta name="keywords" content="{{keywords}}">
+    <meta name="author" content="omoot apps">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="{{languageName}}">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sound Board">
+    <link rel="canonical" href="{{pageUrl}}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{pageUrl}}">
+    <meta property="og:title" content="{{metaTitle}}">
+    <meta property="og:description" content="{{metaDescription}}">
+    <meta property="og:image" content="https://audiosoundboard.app/assets/images/soundboard/optimized/frame1.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{altIphone}}">
+    <meta property="og:site_name" content="{{appName}}">
+    <meta property="og:locale" content="{{ogLocale}}">
+{{ogLocaleAlternates}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{pageUrl}}">
+    <meta name="twitter:title" content="{{metaTitle}}">
+    <meta name="twitter:description" content="{{metaDescription}}">
+    <meta name="twitter:image" content="https://audiosoundboard.app/assets/images/soundboard/optimized/frame1.png">
+    <meta name="twitter:image:alt" content="{{altIphone}}">
+    <meta name="apple-itunes-app" content="app-id=6755937474">
+    <meta name="theme-color" content="#0a0a0f">
+    <link rel="preconnect" href="https://apps.apple.com" crossorigin>
+    <link rel="dns-prefetch" href="https://apps.apple.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/soundboard/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/soundboard/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/soundboard/apple-touch-icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/home.css">
+    <script type="text/javascript">
+        (function(e,c){if(!c.__SV){var l,h;window.mixpanel=c;c._i=[];c.init=function(q,r,f){function t(d,a){var g=a.split(".");2==g.length&&(d=d[g[0]],a=g[1]);d[a]=function(){d.push([a].concat(Array.prototype.slice.call(arguments,0)))}}var b=c;"undefined"!==typeof f?b=c[f]=[]:f="mixpanel";b.people=b.people||[];b.toString=function(d){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);d||(a+=" (stub)");return a};b.people.toString=function(){return b.toString(1)+".people (stub)"};l="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders start_session_recording stop_session_recording people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");
+        for(h=0;h<l.length;h++)t(b,l[h]);var n="set set_once union unset remove delete".split(" ");b.get_group=function(){function d(p){a[p]=function(){b.push([g,[p].concat(Array.prototype.slice.call(arguments,0))])}}for(var a={},g=["get_group"].concat(Array.prototype.slice.call(arguments,0)),m=0;m<n.length;m++)d(n[m]);return a};c._i.push([q,r,f])};c.__SV=1.2;var k=e.createElement("script");k.type="text/javascript";k.async=!0;k.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===
+        e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";e=e.getElementsByTagName("script")[0];e.parentNode.insertBefore(k,e)}})(document,window.mixpanel||[]);
+        mixpanel.init('2ab77ed29d0b04d62a75f63eaecc2a94', {
+            autocapture: false,
+            record_sessions_percent: 0,
+            record_heatmap_data: false,
+            api_host: 'https://api-eu.mixpanel.com',
+            track_pageview: false
+        });
+        if (typeof mixpanel.set_config === 'function') {
+            mixpanel.set_config({ autocapture: false });
+        }
+    </script>
+    <script src="assets/js/mixpanel-tracker.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof MixpanelTracker !== 'undefined') {
+                MixpanelTracker.init('2ab77ed29d0b04d62a75f63eaecc2a94', {
+                    projectName: 'soundboard',
+                    debug: false
+                });
+            }
+        });
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "SoftwareApplication",
+                "name": {{schemaName}},
+                "alternateName": ["soundboard", "sound board", "soundboard app", "sound board app", "Sound Board", "Sound Board Pro"],
+                "url": "{{pageUrl}}",
+                "applicationCategory": "MultimediaApplication",
+                "operatingSystem": "iOS, iPadOS",
+                "inLanguage": "{{htmlLang}}",
+                "isAccessibleForFree": true,
+                "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+                "description": {{schemaDescription}},
+                "featureList": {{featureList}},
+                "screenshot": "https://audiosoundboard.app/assets/images/soundboard/ipad-board.jpg",
+                "downloadUrl": "{{storeUrl}}",
+                "installUrl": "{{storeUrl}}"
+            },
+            {
+                "@type": "WebPage",
+                "name": {{schemaTitle}},
+                "description": {{schemaDescription}},
+                "url": "{{pageUrl}}",
+                "inLanguage": "{{htmlLang}}",
+                "isPartOf": { "@type": "WebSite", "name": "Sound Board Pro - Audio Pads", "url": "https://audiosoundboard.app/" }
+            }
+        ]
+    }
+    </script>
+{{hreflang}}
+{{localeRedirect}}
+</head>
+<body data-theme="midnight">
+    <a class="skip" href="#hero">{{skip}}</a>
+    <div class="shell">
+        <div class="page">
+            <header class="top">
+                <a class="top-name" href="#hero">
+                    <img src="assets/images/soundboard/apple-touch-icon.png" alt="" width="32" height="32">
+                    Sound Board Pro
+                </a>
+                <a class="store" href="{{storeUrl}}" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>{{download}}</a>
+            </header>
+            <section class="hero" id="hero">
+                <div class="bars" id="bars" aria-hidden="true"></div>
+                <div class="hero-copy">
+                    <h1>{{heroHtml}}</h1>
+                    <p class="deck">{{deck}}</p>
+                    <a class="store store-lg" href="{{storeUrl}}" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="store-label"><span class="store-soft">{{storeSoft}}</span><span class="store-strong">{{storeStrong}}</span></span><span class="free">{{free}}</span></a>
+                </div>
+                <div class="rig">
+                    <div class="device device-ipad">
+                        <div class="bezel"><div class="screen">
+                            <img src="assets/images/soundboard/ipad-board.jpg" alt="{{altIpad}}" width="768" height="1024">
+                        </div></div>
+                    </div>
+                    <div class="device device-phone">
+                        <div class="bezel"><div class="screen">
+                            <img src="assets/images/soundboard/iphone-board.png" alt="{{altIphone}}" width="470" height="1024">
+                        </div></div>
+                    </div>
+                </div>
+            </section>
+            <section class="block" id="boards">
+                <div class="block-head">
+                    <h2>{{boardsHtml}}</h2>
+                </div>
+                <ul class="uses">
+                    <li style="--c:#7982FF"><img src="assets/images/soundboard/cards/card-creators.jpg?v=5" alt="{{useCreators}}"><span>{{useCreators}}</span></li>
+                    <li style="--c:#3B82F6"><img src="assets/images/soundboard/cards/card-live.jpg?v=2" alt="{{useLive}}"><span>{{useLive}}</span></li>
+                    <li style="--c:#F97316"><img src="assets/images/soundboard/cards/card-broadcast.jpg" alt="{{useBroadcast}}"><span>{{useBroadcast}}</span></li>
+                    <li style="--c:#EC4899"><img src="assets/images/soundboard/cards/card-streaming.jpg?v=3" alt="{{useStreaming}}"><span>{{useStreaming}}</span></li>
+                    <li style="--c:#A855F7"><img src="assets/images/soundboard/cards/card-dj.jpg" alt="{{useDj}}"><span>{{useDj}}</span></li>
+                    <li style="--c:#14B8A6"><img src="assets/images/soundboard/cards/card-podcast.jpg" alt="{{usePodcast}}"><span>{{usePodcast}}</span></li>
+                    <li style="--c:#38BDF8"><img src="assets/images/soundboard/cards/card-teaching.jpg?v=2" alt="{{useTeaching}}"><span>{{useTeaching}}</span></li>
+                    <li style="--c:#10B981"><img src="assets/images/soundboard/cards/card-theater.jpg?v=3" alt="{{useTheater}}"><span>{{useTheater}}</span></li>
+                </ul>
+            </section>
+            <section class="block" id="setup">
+                <div class="block-head">
+                    <h2>{{featuresHtml}}</h2>
+                </div>
+                <div class="feats">
+                    <article>
+                        <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+                        <h3>{{f1Title}}</h3>
+                        <p>{{f1Desc}}</p>
+                    </article>
+                    <article>
+                        <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg></span>
+                        <h3>{{f2Title}}</h3>
+                        <p>{{f2Desc}}</p>
+                    </article>
+                    <article>
+                        <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></span>
+                        <h3>{{f3Title}}</h3>
+                        <p>{{f3Desc}}</p>
+                    </article>
+                    <article>
+                        <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>
+                        <h3>{{f4Title}}</h3>
+                        <p>{{f4Desc}}</p>
+                    </article>
+                    <article>
+                        <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></span>
+                        <h3>{{f5Title}}</h3>
+                        <p>{{f5Desc}}</p>
+                    </article>
+                    <article>
+                        <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+                        <h3>{{f6Title}}</h3>
+                        <p>{{f6Desc}}</p>
+                    </article>
+                </div>
+                <div class="themes">
+                    <h2>{{themesHtml}}</h2>
+                    <div class="swatches" id="swatches">
+                        <button type="button" data-theme="midnight" data-hex="#3B82F6" class="on">{{themeMidnight}}</button>
+                        <button type="button" data-theme="ocean" data-hex="#06B6D4">{{themeOcean}}</button>
+                        <button type="button" data-theme="emerald" data-hex="#10B981">{{themeEmerald}}</button>
+                        <button type="button" data-theme="rose" data-hex="#EC4899">{{themeRose}}</button>
+                        <button type="button" data-theme="violet" data-hex="#8B5CF6">{{themeViolet}}</button>
+                    </div>
+                </div>
+            </section>
+            <section class="end" id="end">
+                <h2>{{ctaTitle}}</h2>
+                <p>{{ctaBody}}</p>
+                <a class="store store-lg" href="{{storeUrl}}" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="store-label"><span class="store-soft">{{storeSoft}}</span><span class="store-strong">{{storeStrong}}</span></span><span class="free">{{free}}</span></a>
+            </section>
+            <footer class="site-foot">
+                <a class="top-name" href="#hero">
+                    <img src="assets/images/soundboard/apple-touch-icon.png" alt="" width="32" height="32">
+                    Sound Board Pro
+                </a>
+                <nav aria-label="{{footerAria}}">
+                    <a href="https://mpc-app-c2e7a.web.app/soundboard-privacy.html" target="_blank" rel="noopener noreferrer">{{privacy}}</a>
+                    <a href="https://mpc-app-c2e7a.web.app/soundboard-terms.html" target="_blank" rel="noopener noreferrer">{{terms}}</a>
+                    <a href="mailto:dev.ohmyapp@gmail.com">{{support}}</a>
+                    <a href="mailto:dev.ohmyapp@gmail.com">{{contact}}</a>
+                </nav>
+                {{langSwitcher}}
+                <p>&copy; 2026 {{appName}}</p>
+            </footer>
+        </div>
+    </div>
+    <script src="assets/js/home.js"></script>
+{{langScript}}
+</body>
+</html>

@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 
+Disallow: /lab/
+
 Sitemap: https://audiosoundboard.app/sitemap.xml
