@@ -94,6 +94,21 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
     border-radius: 16px;
 }
 .hero .apple { width: 24px; height: 24px; }
+.hero h1,
+.hero .deck,
+.hero .store,
+.device-ipad,
+.device-phone {
+    animation: fadeInUp 0.8s ease-out both;
+}
+.hero .deck { animation-delay: 0.15s; }
+.hero .store { animation-delay: 0.3s; }
+.device-ipad { animation-delay: 0.55s; }
+.device-phone { animation-delay: 0.75s; }
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: none; }
+}
 .free {
     padding-left: 12px;
     border-left: 1px solid rgba(255,255,255,.35);
@@ -571,6 +586,11 @@ h2 { font-size: clamp(36px, 4vw, 56px); }
     .cols-4 { grid-template-columns: 1fr 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
+    .hero h1,
+    .hero .deck,
+    .hero .store,
+    .device-ipad,
+    .device-phone { animation: none; }
     .pad { transition: none; }
     .bars i { animation: none; height: 36%; }
     .uses li,
