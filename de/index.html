@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <script>
+        (function () {
+            var ua = navigator.userAgent || "";
+            var platform = navigator.platform || "";
+            var touch = navigator.maxTouchPoints || 0;
+            var coarse = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+            var ipad = /iPad|iPhone|iPod/i.test(ua) || /iPad|iPhone|iPod/i.test(platform) || ((/Mac/i.test(platform) || /Macintosh/i.test(ua)) && (touch > 0 || coarse));
+            var os = /Android/i.test(ua) ? "android" : (ipad ? "ios" : "");
+            if (os) document.documentElement.classList.add("os-" + os);
+        })();
+    </script>
     <title>Soundboard App | Soundboard für Live-Shows, Creator und DJs</title>
     <meta name="title" content="Soundboard App | Soundboard für Live-Shows, Creator und DJs">
-    <meta name="description" content="Soundboard app and sound board app. Kostenloses Sound Board für iPhone und iPad. Live-Shows, Creator, DJ, Podcast, Streaming, Rundfunk, Unterricht und Theater. Soundeffekte und SFX sofort abspielen.">
-    <meta name="keywords" content="soundboard, sound board, soundboard app, sound board app, Soundeffekte, SFX, Live-Show, Creator, Rundfunk, Streaming, Podcast, Unterricht, Theater, DJ, iPhone, iPad">
+    <meta name="description" content="Soundboard app and sound board app. Kostenloses Sound Board für iPhone, iPad und Android. Live-Shows, Creator, DJ, Podcast, Streaming, Rundfunk, Unterricht und Theater. Soundeffekte und SFX sofort abspielen.">
+    <meta name="keywords" content="soundboard, sound board, soundboard app, sound board app, Soundeffekte, SFX, Live-Show, Creator, Rundfunk, Streaming, Podcast, Unterricht, Theater, DJ, iPhone, iPad, Android, Google Play">
     <meta name="author" content="omoot apps">
     <meta name="robots" content="index, follow">
     <meta name="language" content="German">
@@ -18,7 +29,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://audiosoundboard.app/de/">
     <meta property="og:title" content="Soundboard App | Soundboard für Live-Shows, Creator und DJs">
-    <meta property="og:description" content="Soundboard app and sound board app. Kostenloses Sound Board für iPhone und iPad. Live-Shows, Creator, DJ, Podcast, Streaming, Rundfunk, Unterricht und Theater. Soundeffekte und SFX sofort abspielen.">
+    <meta property="og:description" content="Soundboard app and sound board app. Kostenloses Sound Board für iPhone, iPad und Android. Live-Shows, Creator, DJ, Podcast, Streaming, Rundfunk, Unterricht und Theater. Soundeffekte und SFX sofort abspielen.">
     <meta property="og:image" content="https://audiosoundboard.app/assets/images/soundboard/optimized/frame1.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -63,13 +74,16 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://audiosoundboard.app/de/">
     <meta name="twitter:title" content="Soundboard App | Soundboard für Live-Shows, Creator und DJs">
-    <meta name="twitter:description" content="Soundboard app and sound board app. Kostenloses Sound Board für iPhone und iPad. Live-Shows, Creator, DJ, Podcast, Streaming, Rundfunk, Unterricht und Theater. Soundeffekte und SFX sofort abspielen.">
+    <meta name="twitter:description" content="Soundboard app and sound board app. Kostenloses Sound Board für iPhone, iPad und Android. Live-Shows, Creator, DJ, Podcast, Streaming, Rundfunk, Unterricht und Theater. Soundeffekte und SFX sofort abspielen.">
     <meta name="twitter:image" content="https://audiosoundboard.app/assets/images/soundboard/optimized/frame1.png">
     <meta name="twitter:image:alt" content="Sound Board auf dem iPhone, zwei Spalten">
     <meta name="apple-itunes-app" content="app-id=6755937474">
+    <meta name="google-play-app" content="app-id=com.ohmyapp.soundboard">
     <meta name="theme-color" content="#0a0a0f">
     <link rel="preconnect" href="https://apps.apple.com" crossorigin>
     <link rel="dns-prefetch" href="https://apps.apple.com">
+    <link rel="preconnect" href="https://play.google.com" crossorigin>
+    <link rel="dns-prefetch" href="https://play.google.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/soundboard/favicon-32x32.png">
@@ -110,23 +124,38 @@
             {
                 "@type": "SoftwareApplication",
                 "name": "Sound Board Pro - Audio Pads",
-                "alternateName": ["soundboard", "sound board", "soundboard app", "sound board app", "Sound Board", "Sound Board Pro"],
+                "alternateName": ["soundboard", "sound board", "soundboard app", "sound board app", "Sound Board", "Sound Board Pro", "soundboard for Android"],
                 "url": "https://audiosoundboard.app/de/",
                 "applicationCategory": "MultimediaApplication",
                 "operatingSystem": "iOS, iPadOS",
                 "inLanguage": "de",
                 "isAccessibleForFree": true,
                 "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-                "description": "Soundboard app and sound board app. Kostenloses Sound Board für iPhone und iPad. Live-Shows, Creator, DJ, Podcast, Streaming, Rundfunk, Unterricht und Theater. Soundeffekte und SFX sofort abspielen.",
+                "description": "Soundboard app and sound board app. Kostenloses Sound Board für iPhone, iPad und Android. Live-Shows, Creator, DJ, Podcast, Streaming, Rundfunk, Unterricht und Theater. Soundeffekte und SFX sofort abspielen.",
                 "featureList": ["Sounds sofort hinzufügen","Soundboards organisieren","Jeden Sound anpassen","Mühelos auslösen","Erweiterte Audio-Einstellungen","Mehrere Themes"],
                 "screenshot": "https://audiosoundboard.app/assets/images/soundboard/ipad-board.jpg",
                 "downloadUrl": "https://apps.apple.com/de/app/sound-board-audio-buttons/id6755937474",
                 "installUrl": "https://apps.apple.com/de/app/sound-board-audio-buttons/id6755937474"
             },
             {
+                "@type": "SoftwareApplication",
+                "name": "Sound Board Pro - Audio Pads",
+                "alternateName": ["soundboard", "sound board", "soundboard app", "sound board app", "Sound Board", "Sound Board Pro", "soundboard for Android"],
+                "url": "https://audiosoundboard.app/de/",
+                "applicationCategory": "MultimediaApplication",
+                "operatingSystem": "Android",
+                "inLanguage": "de",
+                "isAccessibleForFree": true,
+                "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+                "description": "Soundboard app and sound board app. Kostenloses Sound Board für iPhone, iPad und Android. Live-Shows, Creator, DJ, Podcast, Streaming, Rundfunk, Unterricht und Theater. Soundeffekte und SFX sofort abspielen.",
+                "featureList": ["Sounds sofort hinzufügen","Soundboards organisieren","Jeden Sound anpassen","Mühelos auslösen","Erweiterte Audio-Einstellungen","Mehrere Themes"],
+                "downloadUrl": "https://play.google.com/store/apps/details?id=com.ohmyapp.soundboard",
+                "installUrl": "https://play.google.com/store/apps/details?id=com.ohmyapp.soundboard"
+            },
+            {
                 "@type": "WebPage",
                 "name": "Soundboard App | Soundboard für Live-Shows, Creator und DJs",
-                "description": "Soundboard app and sound board app. Kostenloses Sound Board für iPhone und iPad. Live-Shows, Creator, DJ, Podcast, Streaming, Rundfunk, Unterricht und Theater. Soundeffekte und SFX sofort abspielen.",
+                "description": "Soundboard app and sound board app. Kostenloses Sound Board für iPhone, iPad und Android. Live-Shows, Creator, DJ, Podcast, Streaming, Rundfunk, Unterricht und Theater. Soundeffekte und SFX sofort abspielen.",
                 "url": "https://audiosoundboard.app/de/",
                 "inLanguage": "de",
                 "isPartOf": { "@type": "WebSite", "name": "Sound Board Pro - Audio Pads", "url": "https://audiosoundboard.app/" }
@@ -182,14 +211,20 @@
                     <img src="../assets/images/soundboard/apple-touch-icon.png" alt="" width="32" height="32">
                     Sound Board Pro
                 </a>
-                <a class="store" href="https://apps.apple.com/de/app/sound-board-audio-buttons/id6755937474" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>Laden</a>
+                <div class="top-actions">
+                    <a class="store store-ios" href="https://apps.apple.com/de/app/sound-board-audio-buttons/id6755937474" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>Laden</a>
+                    <a class="store store-play store-android" href="https://play.google.com/store/apps/details?id=com.ohmyapp.soundboard" target="_blank" rel="noopener noreferrer"><svg class="play-mark" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6.2 3.4c-.7.4-1.2 1.2-1.2 2.1v13c0 .9.5 1.7 1.2 2.1.7.4 1.6.4 2.3 0l11.2-6.5c.8-.4 1.3-1.2 1.3-2.1s-.5-1.7-1.3-2.1L8.5 3.4c-.7-.4-1.6-.4-2.3 0z"/></svg>Laden</a>
+                </div>
             </header>
             <section class="hero" id="hero">
                 <div class="bars" id="bars" aria-hidden="true"></div>
                 <div class="hero-copy">
                     <h1>Eigenes Soundboard für <span>Live-Shows</span>, <span>Creator</span> und <span>DJs</span></h1>
                     <p class="deck">Erstelle eigene Soundboards, organisiere Audio-Samples und löse Sounds sofort aus</p>
-                    <a class="store store-lg" href="https://apps.apple.com/de/app/sound-board-audio-buttons/id6755937474" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="store-label"><span class="store-soft">Laden im</span><span class="store-strong">App Store</span></span><span class="free">Kostenlos</span></a>
+                    <div class="store-row">
+                        <a class="store store-lg store-ios" href="https://apps.apple.com/de/app/sound-board-audio-buttons/id6755937474" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="store-label"><span class="store-soft">Laden im</span><span class="store-strong">App Store</span></span><span class="free">Kostenlos</span></a>
+                        <a class="store store-lg store-play store-android" href="https://play.google.com/store/apps/details?id=com.ohmyapp.soundboard" target="_blank" rel="noopener noreferrer"><svg class="play-mark" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M6.2 3.4c-.7.4-1.2 1.2-1.2 2.1v13c0 .9.5 1.7 1.2 2.1.7.4 1.6.4 2.3 0l11.2-6.5c.8-.4 1.3-1.2 1.3-2.1s-.5-1.7-1.3-2.1L8.5 3.4c-.7-.4-1.6-.4-2.3 0z"/></svg><span class="store-label"><span class="store-soft">Laden im</span><span class="store-strong">Google Play</span></span><span class="free">Kostenlos</span></a>
+                    </div>
                 </div>
                 <div class="rig">
                     <div class="device device-ipad">
@@ -268,8 +303,11 @@
             </section>
             <section class="end" id="end">
                 <h2>Lade die kostenlose Soundboard-App</h2>
-                <p>Kostenlos für iPhone und iPad. Für Streamer, Podcaster, DJs und Creator.</p>
-                <a class="store store-lg" href="https://apps.apple.com/de/app/sound-board-audio-buttons/id6755937474" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="store-label"><span class="store-soft">Laden im</span><span class="store-strong">App Store</span></span><span class="free">Kostenlos</span></a>
+                <p>Kostenlos für iPhone, iPad und Android. Für Streamer, Podcaster, DJs und Creator.</p>
+                <div class="store-row">
+                    <a class="store store-lg store-ios" href="https://apps.apple.com/de/app/sound-board-audio-buttons/id6755937474" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="store-label"><span class="store-soft">Laden im</span><span class="store-strong">App Store</span></span><span class="free">Kostenlos</span></a>
+                    <a class="store store-lg store-play store-android" href="https://play.google.com/store/apps/details?id=com.ohmyapp.soundboard" target="_blank" rel="noopener noreferrer"><svg class="play-mark" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M6.2 3.4c-.7.4-1.2 1.2-1.2 2.1v13c0 .9.5 1.7 1.2 2.1.7.4 1.6.4 2.3 0l11.2-6.5c.8-.4 1.3-1.2 1.3-2.1s-.5-1.7-1.3-2.1L8.5 3.4c-.7-.4-1.6-.4-2.3 0z"/></svg><span class="store-label"><span class="store-soft">Laden im</span><span class="store-strong">Google Play</span></span><span class="free">Kostenlos</span></a>
+                </div>
             </section>
             <footer class="site-foot">
                 <a class="top-name" href="#hero">

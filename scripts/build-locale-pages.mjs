@@ -108,6 +108,8 @@ function appStoreUrl(country) {
   return `https://apps.apple.com/${country}/app/${APP_SLUG}/id${APP_ID}`;
 }
 
+const PLAY_URL = 'https://play.google.com/store/apps/details?id=com.ohmyapp.soundboard';
+
 function hreflangBlock() {
   const lines = ALL_LOCALES.map(
     ({ hreflang, path: p }) =>
@@ -230,6 +232,7 @@ function buildPage(code) {
     ogLocaleAlternates: ogLocaleAlternates(code),
     appName: appName,
     storeUrl,
+    playUrl: PLAY_URL,
     schemaName: JSON.stringify(appName),
     schemaTitle: JSON.stringify(metaTitle),
     schemaDescription: JSON.stringify(metaDescription),

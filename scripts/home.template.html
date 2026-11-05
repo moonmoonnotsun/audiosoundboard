@@ -3,6 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <script>
+        (function () {
+            var ua = navigator.userAgent || "";
+            var platform = navigator.platform || "";
+            var touch = navigator.maxTouchPoints || 0;
+            var coarse = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+            var ipad = /iPad|iPhone|iPod/i.test(ua) || /iPad|iPhone|iPod/i.test(platform) || ((/Mac/i.test(platform) || /Macintosh/i.test(ua)) && (touch > 0 || coarse));
+            var os = /Android/i.test(ua) ? "android" : (ipad ? "ios" : "");
+            if (os) document.documentElement.classList.add("os-" + os);
+        })();
+    </script>
     <title>{{metaTitle}}</title>
     <meta name="title" content="{{metaTitle}}">
     <meta name="description" content="{{metaDescription}}">
@@ -33,9 +44,12 @@
     <meta name="twitter:image" content="https://audiosoundboard.app/assets/images/soundboard/optimized/frame1.png">
     <meta name="twitter:image:alt" content="{{altIphone}}">
     <meta name="apple-itunes-app" content="app-id=6755937474">
+    <meta name="google-play-app" content="app-id=com.ohmyapp.soundboard">
     <meta name="theme-color" content="#0a0a0f">
     <link rel="preconnect" href="https://apps.apple.com" crossorigin>
     <link rel="dns-prefetch" href="https://apps.apple.com">
+    <link rel="preconnect" href="https://play.google.com" crossorigin>
+    <link rel="dns-prefetch" href="https://play.google.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/png" sizes="32x32" href="assets/images/soundboard/favicon-32x32.png">
@@ -76,7 +90,7 @@
             {
                 "@type": "SoftwareApplication",
                 "name": {{schemaName}},
-                "alternateName": ["soundboard", "sound board", "soundboard app", "sound board app", "Sound Board", "Sound Board Pro"],
+                "alternateName": ["soundboard", "sound board", "soundboard app", "sound board app", "Sound Board", "Sound Board Pro", "soundboard for Android"],
                 "url": "{{pageUrl}}",
                 "applicationCategory": "MultimediaApplication",
                 "operatingSystem": "iOS, iPadOS",
@@ -88,6 +102,21 @@
                 "screenshot": "https://audiosoundboard.app/assets/images/soundboard/ipad-board.jpg",
                 "downloadUrl": "{{storeUrl}}",
                 "installUrl": "{{storeUrl}}"
+            },
+            {
+                "@type": "SoftwareApplication",
+                "name": {{schemaName}},
+                "alternateName": ["soundboard", "sound board", "soundboard app", "sound board app", "Sound Board", "Sound Board Pro", "soundboard for Android"],
+                "url": "{{pageUrl}}",
+                "applicationCategory": "MultimediaApplication",
+                "operatingSystem": "Android",
+                "inLanguage": "{{htmlLang}}",
+                "isAccessibleForFree": true,
+                "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+                "description": {{schemaDescription}},
+                "featureList": {{featureList}},
+                "downloadUrl": "{{playUrl}}",
+                "installUrl": "{{playUrl}}"
             },
             {
                 "@type": "WebPage",
@@ -112,14 +141,20 @@
                     <img src="assets/images/soundboard/apple-touch-icon.png" alt="" width="32" height="32">
                     Sound Board Pro
                 </a>
-                <a class="store" href="{{storeUrl}}" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>{{download}}</a>
+                <div class="top-actions">
+                    <a class="store store-ios" href="{{storeUrl}}" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>{{download}}</a>
+                    <a class="store store-play store-android" href="{{playUrl}}" target="_blank" rel="noopener noreferrer"><svg class="play-mark" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6.2 3.4c-.7.4-1.2 1.2-1.2 2.1v13c0 .9.5 1.7 1.2 2.1.7.4 1.6.4 2.3 0l11.2-6.5c.8-.4 1.3-1.2 1.3-2.1s-.5-1.7-1.3-2.1L8.5 3.4c-.7-.4-1.6-.4-2.3 0z"/></svg>{{download}}</a>
+                </div>
             </header>
             <section class="hero" id="hero">
                 <div class="bars" id="bars" aria-hidden="true"></div>
                 <div class="hero-copy">
                     <h1>{{heroHtml}}</h1>
                     <p class="deck">{{deck}}</p>
-                    <a class="store store-lg" href="{{storeUrl}}" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="store-label"><span class="store-soft">{{storeSoft}}</span><span class="store-strong">{{storeStrong}}</span></span><span class="free">{{free}}</span></a>
+                    <div class="store-row">
+                        <a class="store store-lg store-ios" href="{{storeUrl}}" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="store-label"><span class="store-soft">{{storeSoft}}</span><span class="store-strong">{{storeStrong}}</span></span><span class="free">{{free}}</span></a>
+                        <a class="store store-lg store-play store-android" href="{{playUrl}}" target="_blank" rel="noopener noreferrer"><svg class="play-mark" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M6.2 3.4c-.7.4-1.2 1.2-1.2 2.1v13c0 .9.5 1.7 1.2 2.1.7.4 1.6.4 2.3 0l11.2-6.5c.8-.4 1.3-1.2 1.3-2.1s-.5-1.7-1.3-2.1L8.5 3.4c-.7-.4-1.6-.4-2.3 0z"/></svg><span class="store-label"><span class="store-soft">{{storeSoft}}</span><span class="store-strong">Google Play</span></span><span class="free">{{free}}</span></a>
+                    </div>
                 </div>
                 <div class="rig">
                     <div class="device device-ipad">
@@ -199,7 +234,10 @@
             <section class="end" id="end">
                 <h2>{{ctaTitle}}</h2>
                 <p>{{ctaBody}}</p>
-                <a class="store store-lg" href="{{storeUrl}}" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="store-label"><span class="store-soft">{{storeSoft}}</span><span class="store-strong">{{storeStrong}}</span></span><span class="free">{{free}}</span></a>
+                <div class="store-row">
+                    <a class="store store-lg store-ios" href="{{storeUrl}}" target="_blank" rel="noopener noreferrer"><svg class="apple" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="store-label"><span class="store-soft">{{storeSoft}}</span><span class="store-strong">{{storeStrong}}</span></span><span class="free">{{free}}</span></a>
+                    <a class="store store-lg store-play store-android" href="{{playUrl}}" target="_blank" rel="noopener noreferrer"><svg class="play-mark" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M6.2 3.4c-.7.4-1.2 1.2-1.2 2.1v13c0 .9.5 1.7 1.2 2.1.7.4 1.6.4 2.3 0l11.2-6.5c.8-.4 1.3-1.2 1.3-2.1s-.5-1.7-1.3-2.1L8.5 3.4c-.7-.4-1.6-.4-2.3 0z"/></svg><span class="store-label"><span class="store-soft">{{storeSoft}}</span><span class="store-strong">Google Play</span></span><span class="free">{{free}}</span></a>
+                </div>
             </section>
             <footer class="site-foot">
                 <a class="top-name" href="#hero">

@@ -159,9 +159,11 @@
                 if (typeof done === 'function') done();
             };
 
+            const href = (buttonElement && buttonElement.href) || '';
             mixpanel.track(this.formatEventName('download_button_clicked'), {
                 app_name: appName,
                 button_location: buttonLocation,
+                store: href.indexOf('play.google.com') !== -1 ? 'google_play' : 'app_store',
                 page_name: appName,
                 device_type: this.getDeviceType(),
                 time_on_page: timeOnPage,
@@ -186,7 +188,7 @@
             if (element.dataset && element.dataset.storeUrl) {
                 return element.dataset.storeUrl;
             }
-            if (element.href && element.href.indexOf('apps.apple.com') !== -1) {
+            if (element.href && (element.href.indexOf('apps.apple.com') !== -1 || element.href.indexOf('play.google.com') !== -1)) {
                 return element.href;
             }
             return null;
@@ -252,7 +254,7 @@
         setupEventListeners: function() {
             // Track download button clicks, then navigate after the event is queued
             document.addEventListener('click', (e) => {
-                const target = e.target.closest('.btn-app-store, a[href*="apps.apple.com"]');
+                const target = e.target.closest('.btn-app-store, a[href*="apps.apple.com"], a[href*="play.google.com"]');
                 if (!target) return;
 
                 const storeUrl = this.getStoreUrl(target);
