@@ -120,32 +120,12 @@ function hreflangBlock() {
 }
 
 function localeRedirectScript() {
-  const routeEntries = ALL_LOCALES.filter(({ path: p }) => p !== '/').flatMap(({ path: p }) => {
-    const dir = p.replace(/\//g, '');
-    const entries = [[dir, p]];
-    if (dir === 'pt') entries.push(['pt-br', p]);
-    if (dir === 'zh') entries.push(['zh-cn', p], ['zh-hans', p]);
-    if (dir === 'zh-tw') entries.push(['zh-hant', p], ['zh-hk', p], ['zh-tw', p]);
-    if (dir === 'pt-pt') entries.push(['pt-pt', p]);
-    if (dir === 'uk') entries.push(['ua', p]);
-    if (dir === 'nb') entries.push(['no', p], ['nn', p]);
-    if (dir === 'es-mx') entries.push(['es-mx', p]);
-    if (dir === 'fr-ca') entries.push(['fr-ca', p]);
-    return entries;
-  });
-  const routesJson = JSON.stringify(Object.fromEntries(routeEntries));
   return `    <script>
         (function () {
-            var routes = ${routesJson};
             var path = window.location.pathname;
-            if (path !== '/' && path !== '/index.html') return;
-            var langs = navigator.languages || [navigator.language || 'en'];
-            var primary = (langs[0] || 'en').toLowerCase();
-            if (primary === 'en' || primary.indexOf('en-') === 0) return;
-            var tag = primary;
-            var base = primary.split('-')[0];
-            if (routes[tag]) { window.location.replace(routes[tag]); return; }
-            if (routes[base]) { window.location.replace(routes[base]); return; }
+            if (!/\\/index\\.html$/.test(path)) return;
+            var next = path.replace(/index\\.html$/, '');
+            window.location.replace(next + window.location.search + window.location.hash);
         })();
     </script>`;
 }
@@ -238,7 +218,7 @@ function buildPage(code) {
     schemaDescription: JSON.stringify(metaDescription),
     featureList: JSON.stringify(featureList),
     hreflang: hreflangBlock(),
-    localeRedirect: isEnglish ? localeRedirectScript() : '',
+    localeRedirect: localeRedirectScript(),
     langSwitcher: langSwitcher(code, strings.langLabel),
     langScript: langSwitcherScript(),
   };
